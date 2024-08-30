@@ -34,11 +34,94 @@ install.packages("tidyverse")
 library(tidyverse)
 ```
 
-Here is how to add.
+Here is how to import the data set (.rds file).
 
 ```{r}
-2+2
+maryland_winred_contributions <- read_rds("maryland_winred.rds")
 ```
 
+Here is how to view the number of columns and roles, a list of the columns, the data type of each column and first few values of each column. 
 
+```{r}
+glimpse(maryland_winred_contributions)
+```
+Here is how to print out columns and first six rows of data.
 
+```{r}
+head(maryland_winred_contributions)
+```
+Here is how to group the same individual values of the column and count their number.
+
+```{r}
+maryland_winred_contributions |>
+  group_by(memo_text) |>
+  summarise(
+    count_contributes = n()
+  )
+
+```
+From the previous function, here is how to arrange the list of value in descending order. 
+
+```{r}
+maryland_winred_contributions |>
+  group_by(memo_text) |>
+  summarise(
+    count_contributes = n()
+  ) |>
+  arrange(desc(count_contributes))
+```
+From the previous function, here is how to group the values of more than one column. 
+
+```{r}
+maryland_winred_contributions |>
+  group_by(memo_text, date) |>
+  summarise(
+    count_contributes = n()
+  ) |>
+  arrange(desc(count_contributes))
+```
+From the previous function, here is how to group the values of the column, count their number, and add more function to sum up another countable value from different column of each group of initial value. 
+
+```{r}
+maryland_winred_contributions |>
+  group_by(memo_text) |>
+  summarise(
+    count_contributes = n(),
+    total_amount = sum(amount)
+  ) |>
+  arrange(desc(count_contributes))
+```
+From the previous function, here is how to group the values of the column, count their number, and add more functions to find total amount, mean, media of another countable value from different column of each group of initial value.
+
+```{r}
+maryland_winred_contributions |>
+  group_by(memo_text) |>
+  summarise(
+    count_contributes = n(),
+    total_amount = sum(amount),
+    mean_amount = mean(amount),
+    media_amount = median(amount)
+  ) |>
+  arrange(desc(count_contributes))
+```
+From the previous function, here is how to group the values of the column, count their number, and add more functions to find total amount, mean, media, min, max of another countable value from different column of each group of initial value.
+
+```{r}
+maryland_winred_contributions |>
+  group_by(memo_text) |>
+  summarise(
+    count_contributes = n(),
+    total_amount = sum(amount),
+    mean_amount = mean(amount),
+    media_amount = median(amount),
+    min_amount = min(amount),
+    max_amount = max(amount)
+  ) |>
+  arrange(desc(count_contributes))
+```
+Here is how to sort rows in the data set from a column's values in max to min amount order. 
+
+```{r}
+maryland_winred_contributions |>
+  arrange(desc(amount))
+```
