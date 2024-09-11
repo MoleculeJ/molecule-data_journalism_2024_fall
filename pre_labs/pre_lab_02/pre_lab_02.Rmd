@@ -352,4 +352,4 @@ So the month of June 2022 had the most expenditures by far in this data. We'll b
 
 Describe the values in the new `month` column - what do you think the data is showing here?
 
-**Answer** I think the values in the 'month' column are the grouping of rows that share the same month within the same year together.   
+**Answer** I think the values in the 'month' column are the grouping of rows that share the same month within the same year together, and differentiate the rows that share the same month but have different years from each other.     
