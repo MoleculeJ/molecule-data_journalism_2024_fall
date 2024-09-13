@@ -1,0 +1,151 @@
+---
+title: "lab_02"
+author: "Molecule Jongwilai"
+date: "2024-09-11"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Load libraries and establish settings
+
+```{r}
+# Turn off scientific notation
+options(scipen=999)
+
+# Load the tidyverse. If you have not installed the tidyverse already, remove the # from the next line and run it first.  
+# install.packages('tidyverse')
+library(tidyverse)
+library(lubridate)
+```
+
+## Load Data
+
+For this lab we'll be working with a slice of Maryland voter registration data: records of people who have registration dates this year through Aug. 7. Let's load it.
+
+```{r}
+md_voters_2024 <- read_rds("data/lab_02.rds")
+```
+
+## Examine Data
+
+Take a look at the data, getting familiar with what it contains. Most of the columns should be self-explanatory, but there are two date columns: STATE_REGISTRATION_DATE and COUNTY_REGISTRATION_DATE. The former represents the date the person registered as a Maryland voter; the latter is when they registered in their current county. They may be the same, but if a voter moves from one county to another they will differ. This is important because if the two dates are the same, that's a pretty good indication that this is a *new* voter, someone who has no history of registering in Maryland. You'll need to keep that definition in mind.
+
+## Answer questions
+
+**Q1** How many voters appear to be *new* registrants since July 21, when President Joe Biden announced he would leave the race, based on the information above? Create a dataframe to hold the only those voters. Which counties have seen the most? Take a look at county population figures here and compare the two in your answer: <https://worldpopulationreview.com/us-counties/maryland>.
+
+**A1** 
+- The number of new registrants since July 21 is 17,076. 
+- Montgomery County has the most new voters.
+- New voters in Montgomery County are 4,847 or approximately 0.45% compared to the whole population in the county, 1,063,881. 
+
+```{r}
+new_voters <- md_voters_2024 |>
+  filter(STATE_REGISTRATION_DATE > "2024-07-21") |>
+  filter(STATE_REGISTRATION_DATE == COUNTY_REGISTRATION_DATE)
+new_voters_each_county <- new_voters |>
+  group_by(COUNTY) |>
+  summarise(
+    count_counties = n()
+  ) |>
+  arrange(desc(count_counties))
+```
+
+**Q2** A better question is whether the new voters you found in Q1 are an outlier compared to other weeks this year. Using the original dataframe with 2024 registrants, use `mutate()` and lubridate to produce week numbers from the COUNTY_REGISTRATION_DATE (Lubridate has a function that turns a date into a week number. Use that to answer this question). Save that to the original dataframe. Then calculate how many voters are in each week. Describe the distribution of voters groups in a sentence - are the weeks from July 21-August 7 different from the rest, and if so, how?
+
+**A2** The number of voters between July 21 - Aug 7 (week 29th - week 32nd) is apparently higher than other weeks in the year, especially in week 30th and week 31st, July 22 - Aug 4 (I used 'week(dt)' to see which week each day is in, but I am unsure if there is a syntax that directly converts the week number to the actual date.) which there are more than 7,000 voters per week comparing to most others of each week that there are about 2,000 - 4,000 voters.
+
+```{r}
+week_numbers <- md_voters_2024 |>
+  mutate(
+    week_numbers = week(COUNTY_REGISTRATION_DATE)
+  ) |>
+  group_by(week_numbers) |>
+  summarise(
+    count_voters_each_week = n()
+  ) |>
+  arrange(desc(week_numbers))
+```
+```{r}
+week('2024-07-21')
+week('2024-07-22')
+week('2024-07-23')
+week('2024-07-24')
+week('2024-07-25')
+week('2024-07-26')
+week('2024-07-27')
+week('2024-07-28')
+week('2024-07-29')
+week('2024-07-30')
+week('2024-07-31')
+week('2024-08-01')
+week('2024-08-02')
+week('2024-08-03')
+week('2024-08-04')
+week('2024-08-05')
+week('2024-08-06')
+week('2024-08-07')
+```
+**Q3** Using lubridate, show which month saw the largest number of registrations. Does the answer help shed more light on Q2? 
+
+**A3** July has the the largest number of registrations, 26,284, which is in line with the result in Q2 showing that week 30th and 31st, which most days in these 2 weeks are in July, have the largest number of registrations as well.
+
+```{r}
+month_voters <- md_voters_2024 |>
+  mutate(month = floor_date(COUNTY_REGISTRATION_DATE, "month")) |>
+  group_by(month) |>
+    summarise(
+    voters_each_month = n()
+  ) |>
+  arrange(desc(month))
+```
+
+**Q4** Maryland has, officially, five regions: <https://www.visitmaryland.org/article/maryland-regions>. Modify the original dataframe again to add a `region` column based on the `COUNTY` value using case_when. Are you going to have to do this for every Maryland county plus Baltimore City? Yes, you are. Which regions and parties account for the most new voters?
+
+**A4** Capital Region with the Democratic party has the most new voters. 
+
+```{r}
+voters_with_region <- md_voters_2024 |>
+  mutate(
+    region = case_when(
+      COUNTY == "Allegany" ~ "Western Maryland",
+      COUNTY == "Anne Arundel" ~ "Central Maryland",
+      COUNTY == "Baltimore City" ~ "Central Maryland",
+      COUNTY == "Baltimore County" ~ "Central Maryland",
+      COUNTY == "Calvert" ~ "Southern Maryland",
+      COUNTY == "Caroline" ~ "Eastern Shore Maryland",
+      COUNTY == "Carroll" ~ "Central Maryland",
+      COUNTY == "Cecil" ~ "Eastern Shore Maryland",
+      COUNTY == "Charles" ~ "Southern Maryland",
+      COUNTY == "Dorchester" ~ "Eastern Shore Maryland",
+      COUNTY == "Frederick" ~ "Capital Region",
+      COUNTY == "Garrett" ~ "Western Maryland",
+      COUNTY == "Harford" ~ "Central Maryland",
+      COUNTY == "Howard" ~ "Central Maryland",
+      COUNTY == "Kent" ~ "Eastern Shore Maryland",
+      COUNTY == "Montgomery" ~ "Capital Region",
+      COUNTY == "Prince George's" ~ "Capital Region",
+      COUNTY == "Queen Anne's" ~ "Eastern Shore Maryland",
+      COUNTY == "Saint Mary's" ~ "Southern Maryland",
+      COUNTY == "Somerset" ~ "Eastern Shore Maryland",
+      COUNTY == "Talbot" ~ "Eastern Shore Maryland",
+      COUNTY == "Washington" ~ "Western Maryland",
+      COUNTY == "Wicomico" ~ "Eastern Shore Maryland",
+      COUNTY == "Worcester" ~ "Eastern Shore Maryland"
+    )
+  ) |>
+  group_by(region, PARTY) |>
+  summarise(
+    voters_count = n()
+  ) |>
+  arrange(desc(voters_count))
+```
+
+**Q5** What's an additional question you could ask of this data?
+
+**A5** From the data, three of five regions have new voters registering for the Democratic party more than those registering for the Republican party, nonetheless, the other two regions, which are Eastern Shore Maryland and Western Maryland, have new voters registering for the Republican party more than people who register for the Democratic party. 
+
+Why are these two regions different from others, especially in Western Maryland where the number of new voters for the Republican party is almost twofold compared to new voters for the Democratic party? What are the differences in terms of demography? Or are there any other factors that could explain this finding?     
