@@ -1,0 +1,218 @@
+---
+title: "lab_04"
+author: "Molecule Jongwilai"
+date: "2024-09-25"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## About this lab
+
+To complete this lab, you need to: \* run existing code as directed (look for **Task**). \* modify existing code as directed (look for **Task**). \* write code in empty codeblocks provided to answer questions included (look for **Q**). \* write out the answer in the form of a complete sentence in the space given (look for **A**).
+
+When you are finished, commit changes and push to your personal GitHub repo, then submit the URL to this document on ELMS.
+
+## Load libraries and establish settings
+
+You'll need to load three packages for this: the tidyverse, lubridate and janitor.
+
+**Task** load these three packages.
+
+```{r}
+# Turn off scientific notation
+options(scipen=999)
+
+# Load the tidyverse. If you have not installed the tidyverse already, remove the # from the next line and run it first.  
+# install.packages('tidyverse')
+library(tidyverse)
+library(janitor)
+library(lubridate)
+
+```
+
+For this lab, we want to investigate spending by the two leading Senate candidates in Maryland during this election, Angela Alsobrooks and Larry Hogan. Our goal is to try and standardize the purpose of the expenditures so that we can compare the two campaigns. We have the data, but it's messy - purpose descriptions are spelled differently and capitalized differently - and we need to clean it up. We'll use a combination of RStudio and OpenRefine to do that.
+
+The basic process here is to start in RStudio, export data so that we can use OpenRefine to clean it up, and then bring it back into RStudio to finish our analysis.
+
+## Load Data
+
+You'll need to load one data set, a CSV file of campaign expenditures located in the data folder called "md_senate_expenses.csv"
+
+**Task** Create a codeblock below, then read the data in and assign it to an appropriate variable name. You'll want to make sure that any date columns are actually date datatypes.
+
+```{r}
+# Load the Maryland expenditures data table
+senate_expenses <- read_csv("data/md_senate_expenses.csv") 
+```
+```{r}
+glimpse(senate_expenses)
+```
+
+## Answer questions
+
+**Q1.** You've been assigned to compare the spending priorities of the two campaigns, but they describe their spending differently using the `purpose` column. Using OpenRefine, create a project using the original CSV file, make a copy of the `purpose` column called `purpose_clean` and then standardize it, focusing on the purposes that appear most often or have the largest total amounts. You can transform the data as you want - making all records the same case, for example, to help. The goal is to be able to group together as many similar purpose values, so you can choose to call all transportation-related expenses the same thing.
+
+How do you know when you're done? It's a judgment call, but you should be close to 100 unique values for `purpose_clean`, and maybe even below that number.
+
+Then, when you are done standardizing `purpose_clean`, export it as a new CSV file to your data folder, *giving it a different name* and read it back into RStudio as a new dataframe.
+
+Then, using that `purpose_clean` column, write code to find the largest amounts of spending on categories by both campaigns.
+
+**A1.**
+The category that has the most amount of spending is 'Advertising' for Alsobrooks which is the same category as the most amount spending category of Hogan.   
+
+```{r}
+new_senate_expenses <- read_csv("data/new_md_senate_expenses.csv")
+```
+```{r}
+new_senate_expenses |>
+  filter(candidate == "Alsobrooks") |>
+  group_by(purpose_clean) |>
+  summarise(
+    purpose_amount = sum(amount)
+  ) |>
+  arrange(desc(purpose_amount))
+```
+```{r}
+new_senate_expenses |>
+  filter(candidate == "Hogan") |>
+  group_by(purpose_clean) |>
+  summarise(
+    purpose_amount = sum(amount)
+  ) |>
+  arrange(desc(purpose_amount))
+```
+**Q2.** Let's do some research on the top purposes from A1. Feel free to search the Web to understand those terms better if need be, and then write a description comparing and contrasting the two campaigns' largest categories of spending.
+
+**A2.** Considering both candidates' top categories of spending, it's quite obvious that both candidates spent most on advertising, but there may be some nuances in detail about it. If tracing back to the original 'purpose' column, it will appear that Alsobrooks has much spending on online advertising. On the other hand, the fourth top spending category of Hogan is 'Print Expense', so we can set a hypothesis that he may spend much on printed advertising, and investigate further on that to fact-check this hypothesis.
+
+In addition, the second most spending category of Alsobrooks is 'Salary' while Hogan's is 'Staffing Services'. This may mean that Alsobrooks directly hired staff for her campaigns while Hogan hired staff via staffing service. We can investigate more on why they choose to hire staff by different processes. 
+
+(I understand that 'staffing service' is not the same thing as 'staffing' or 'salary' so I didn't change it from the original spreadsheet)
+
+**Q3.** Pick one of the top categories for each campaign and write code that shows how that spending has changed over time, if at all. You'll need to use lubridate for this. Write a couple of sentences describing that pattern.
+
+**A3.** Alsobrooks spent on advertising for her campaign the most in April 2024, and Hogan spent on advertising the most in May 2024 which I think makes sense as the primary election for the U.S. Senate from Maryland was held on May 14, 2024. 
+
+```{r}
+new_senate_expenses |>
+  filter(candidate == "Alsobrooks") |>
+  filter(purpose_clean == "Advertising") |>
+  mutate(month = floor_date(date, "month")) |>
+  group_by(month) |>
+  summarise(
+    sum_each_month = sum(amount)
+  ) |>
+  arrange((month))
+
+```
+```{r}
+new_senate_expenses |>
+  filter(candidate == "Hogan") |>
+  filter(purpose_clean == "Advertising") |>
+  mutate(month = floor_date(date, "month")) |>
+  group_by(month) |>
+  summarise(
+    sum_each_month = sum(amount)
+  ) |>
+  arrange((month))
+```
+**Q4.** Which committee has the larger payroll or salary spending so far? How many unique recipients of payroll/staff spending are there for each candidate?
+
+**A4.**
+- Alsobrooks has the larger payroll/salary spending with $822,015 compared to Hogan which spent $20,250 as salary for staff. 
+- There are 23 unique recipients of payroll/staff for Alsobrooks and only 1 for Hogan.  
+
+```{r}
+new_senate_expenses |>
+  filter(candidate == "Alsobrooks") |>
+  filter(purpose_clean == "Salary") |>
+  group_by(purpose_clean) |>
+  summarise(
+    amount_salary = sum(amount)
+  )
+```
+```{r}
+new_senate_expenses |>
+  filter(candidate == "Hogan") |>
+  filter(purpose_clean == "Salary") |>
+  group_by(purpose_clean) |>
+  summarise(
+    amount_salary = sum(amount)
+  )
+```
+```{r}
+# I didn't find the 'Salary' in the 'purpose_clean' column so I tried to find it in the original column 'purpose' in case I messed it up with other new names.
+
+new_senate_expenses |>
+  filter(candidate == "Hogan") |>
+  filter(purpose == "Salary") |>
+  group_by(purpose) |>
+  summarise(
+    amount_salary = sum(amount)
+  )
+```
+```{r}
+# I also tried to find the word 'Payroll' in the 'purpose' column to recheck if I missed it because I remember that I didn't see this word while working on OpenRefine in the original spreadsheet, and I didn't change 'Payroll Fee' or 'Payroll Taxes' to 'Payroll' since I understand it is not the money given to the staffs.  
+
+new_senate_expenses |>
+  filter(candidate == "Hogan") |>
+  filter(purpose == "Payroll") |>
+  group_by(purpose) |>
+  summarise(
+    amount_salary = sum(amount)
+  )
+```
+```{r}
+# I remember changing 'CONTRACTOR FIELD STAFF' to 'staffing' while working in Open Refine so I looked for this keyword as I understand it could be counted as a salary given to staff. 
+
+new_senate_expenses |>
+  filter(candidate == "Hogan") |>
+  filter(purpose_clean == "Staffing") |>
+  group_by(purpose_clean) |>
+  summarise(
+    amount_salary = sum(amount)
+  )
+```
+```{r}
+new_senate_expenses |>
+  filter(candidate == "Alsobrooks") |>
+  filter(purpose_clean == "Salary") |>
+  summarise(
+    unique_recipient = n_distinct(first_name, last_name)
+  )
+```
+```{r}
+# I'm not sure if I used n_distinct() correctly, so I recheck the result with another method. 
+
+new_senate_expenses |>
+  filter(candidate == "Alsobrooks") |>
+  filter(purpose_clean == "Salary") |>
+  group_by(first_name, last_name) |>
+  summarise(
+    count_each_unique_recipient = n()
+  )
+```
+```{r}
+new_senate_expenses |>
+  filter(candidate == "Hogan") |>
+  filter(purpose_clean == "Staffing") |>
+  summarise(
+    unique_recipient = n_distinct(first_name, last_name)
+  )
+```
+```{r}
+new_senate_expenses |>
+  filter(candidate == "Hogan") |>
+  filter(purpose_clean == "Staffing") |>
+  group_by(first_name, last_name) |>
+  summarise(
+    count_each_unique_recipient = n()
+  )
+```
+**Q5** What's the most interesting story idea you've found in this data?
+
+**A5** I think spending on salary/payroll/staffing could be an interesting idea for the story since while Alsobrooks spent so much money on this category with 23 staff as recipients, Hogan only paid to 'KYU KWAK', the only recipient who gets paid under the description 'CONTRACTOR FIELD STAFF' in the 'purpose' column (Fact-checking may be required to confirm if this is the type of actual salary spending), and he spent much money for 'Staffing Service' to the organization named 'PURPLE SURFBOARD'. This could be initially assumed that Hogan chose to almost completely hire staff from third-party services rather than do it directly. We could begin the investigation on that to answer why and who is 'PURPLE SURFBOARD.  
