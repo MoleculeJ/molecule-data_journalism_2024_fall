@@ -1,0 +1,156 @@
+---
+title: "lab_05"
+author: "Moelcule Jongwilai"
+date: "2024-10-02"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Load libraries and establish settings
+
+```{r}
+# load the tidyverse
+library(tidyverse)
+```
+
+## Getting Started
+
+This week we'll be combining and joining data to make it more useful and to ask some questions about it. This week, we'll revisit our new Maryland voters data and try to join it with contributions to the Harris campaign from Maryland donors made via ActBlue. Can we find new voters who are not registered Democrats who gave to Harris after she became a presidential candidate on July 21? What, if anything, can we say about those people?
+
+We'll be doing something similar to what Ence Morse did for [this Washington Post story](https://www.washingtonpost.com/politics/2024/09/24/kamala-harris-younger-donors/?pwapi_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyZWFzb24iOiJnaWZ0IiwibmJmIjoxNzI3MzIzMjAwLCJpc3MiOiJzdWJzY3JpcHRpb25zIiwiZXhwIjoxNzI4NzA1NTk5LCJpYXQiOjE3MjczMjMyMDAsImp0aSI6ImIwYWMxNTk4LWMwMDgtNDE5Ny04MjAyLWVmMWNjZWFmYWZiMiIsInVybCI6Imh0dHBzOi8vd3d3Lndhc2hpbmd0b25wb3N0LmNvbS9wb2xpdGljcy8yMDI0LzA5LzI0L2thbWFsYS1oYXJyaXMteW91bmdlci1kb25vcnMvIn0.3-s0tBkMV7Y9DD21CBsKMlaliGlOKT2egCO-UFT735Y), just on a smaller scale.
+
+First, load two CSV contribution files in the `data` folder, one each for donations made in July and August, and then combine them into a single dataframe.
+
+```{r}
+# load the Harris contribution data files and combine them
+july_harris <- read_csv("data/july_harris.csv")
+august_harris <- read_csv("data/august_harris.csv")
+```
+```{r}
+july_august_harris <- bind_rows(list(july_harris, august_harris))
+```
+
+Next, let's read in the new voters (people who registered in 2024):
+
+```{r}
+# load the new voters data
+new_voters <- read_csv("data/new_voters.csv")
+```
+
+Next join the Harris donations to the voter data. Remember, people's names are common, __so you'll want to use name columns and address information__. You'll need to figure out which columns to use from both dataframes. The new_voters data has both a single Address column and various parts of the address, such as HouseNumber. Make a plan for picking your join columns - try out some combinations - and save the results to a new dataframe.
+
+```{r}
+# join the combined Harris file to the new voters
+# you will need to determine what columns to use
+new_voters_donation1 <- new_voters |> 
+  left_join(july_august_harris, join_by(FirstName==first_name, LastName==last_name))
+```
+```{r}
+new_voters_donation2 <- new_voters |> 
+  left_join(july_august_harris, join_by(FirstName==first_name, LastName==last_name, Address==address_one))
+```
+```{r}
+new_voters_donation3 <- new_voters |> 
+  inner_join(july_august_harris, join_by(FirstName==first_name, LastName==last_name, Address==address_one))
+```
+```{r}
+new_voters_donation4 <- new_voters |> 
+  inner_join(july_august_harris, join_by(FirstName==first_name, LastName==last_name, Address==address_one, ResidentialZip==zip))
+```
+
+## Answer questions
+
+Q1. Explain why you used the columns you did to make the join, and why that result is better than other ways you tried. Are there any problems with the join you made, such as the possibility of false positives?
+
+A1. The instruction required me to find only new voters who donated to the Harris campaign in July and August, so I chose the 'inner_join' method to find unique rows that intersected between 2 datasets. 
+
+For join columns, as joining only by first name and last name columns could produce false positive results because people's names can be common, I decided to add one more pair of columns as another join column which is  'Adress' from 'new_voters' and 'address_one' from 'july_august_harris' because these two columns provide house/resident number and street which I think is specific information that could help filter unique rows to be joined. 
+
+In addition, to make sure that I could get as many unique rows as possible, I added one more pair of columns which is 'ResidentialZip' and 'Zip' to be another join column. I got outcomes that have 2 rows fewer, so I think this is the closest number of unique rows I could filter.           
+
+Q2. Based on your join, how many donations to Harris have come from people who registered this year? How many unique people does that represent, and which donors have given the largest _number_ of donations since July 20? 
+
+A2. 
+- There are 363 donations that came from people who registered this year. 
+- These donations represent 268 unique people.
+- Brandyn Best is a donor who has given the largest number of donations (5 times) since July 20. 
+
+```{r}
+new_voters_donation4 |>
+  summarise(
+    unique_name = n_distinct(FirstName, LastName)
+  )
+```
+```{r}
+new_voters_donation4 |>
+  filter(CountyRegistrationDate > "2024-07-20") |>
+  group_by(FirstName, LastName) |>
+  summarise(
+    unique_name = n()
+    ) |>
+  arrange(desc(unique_name))
+```
+Q3. What are the party and gender breakdowns of those donors? How many donations has Harris gotten from non-Democrats?
+
+A3. 
+- There are 230 donors who registered for Democrat, 2 donors who registered for Liberal, 1 donor who registered for NLM, 2 donors who registered for OTH, 3 donors who registered for Republican and 30 donors who registered for UNA. (I may need a data dictionary of this dataset to look up some party abbreviations)  
+- These donors consist of 134 female, 125 male, and 9 with no information about gender. 
+- There are 43 donations that Harris got from donors who registered for the non-Democrats party.
+
+```{r}
+new_voters_donation4 |>
+  group_by(FirstName, LastName, Party) |>
+  summarise(
+    count_unique_person =n()
+  ) |>
+  group_by(Party) |>
+  summarise(
+    count_party = n()
+  )
+```
+```{r}
+new_voters_donation4 |>
+  group_by(FirstName, LastName, Gender) |>
+  summarise(
+    count_unique_person =n()
+  ) |>
+  group_by(Gender) |>
+  summarise(
+    count_gender = n()
+  )
+```
+```{r}
+new_voters_donation4 |>
+  filter(Party != "DEM") |>
+  summarise(
+    count_donations = n()
+  )
+```
+
+Q4. Choose your own adventure: I want you to come up with a question you could ask of one of the dataframes we've created for this lab. It could involve just the new voters, or the donors or the joined dataframe, but it cannot be a variation of a previous question (so, for example, you can't ask, "How many Republicans have given to Harris"). First write the question and then try to answer it by writing code. If you're not sure of the exact code, try googling (or ask me for advice) but, at a minimum, describe what you think you'd have to do to answer it and what the results would look like. That can help.
+
+A4: Question: Donors from which type of occupation gave the largest number of contributions to the Harris campaign in July - August 2024 and which occupation provided the largest amount of contributions? 
+
+How to find the answer: I pick up the joined dataframe, 'july_august_harris', and then group the values in column 'occupation' before counting the number of rows from each unique group of occupation. The result should show the number of donations made by each group of occupation. 
+
+For the second part of the question, I find the sum of the amount of donated money from each unique group of occupation. The result should show the amount of donations made by each group of occupation.
+
+```{r}
+july_august_harris|>
+  group_by(occupation) |>
+  summarise(
+    occupation_count = n()
+  ) |>
+  arrange(desc(occupation_count))
+```
+```{r}
+july_august_harris|>
+  group_by(occupation) |>
+  summarise(
+    occupation_amount = sum(amount)
+  ) |>
+  arrange(desc(occupation_amount))
+```
