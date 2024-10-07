@@ -50,10 +50,14 @@ In this notebook, we are reverse engineering five sentences from the story.
 
 ### Sentence 1
 
-* **Sentence text**: [According to the 2020 census, the median age of the entire U.S. population was about 39, and among those 25 and older, it was 51 — almost 22 and *10 years younger, respectively, than the median member of the 116th Congress was at the time.*]
+* **Sentence text**: [According to the 2020 census, the median age of the entire U.S. population was about 39, and among those 25 and older, it was 51 — *almost 22 and 10 years younger, respectively, than the median member of the 116th Congress was at the time.*]
 * 
 
-**Analysis summary**: [We were able to confirm that the 116th congress is almost 22 years older than the census data of the entire population, i.e., 39+22 = 61. Our data reveals the median age to be 59. We looked at the census data for 2020. src: https://data.census.gov/table/ACSST5Y2020.S0101?q=age%20in%202020 imported as 2020_census_age.csv in 'data' folder. The census data explicitly mentions 39 to be the median data in their csv table.] 
+**Analysis summary**: [We were able to confirm that the median age of 116th congress is almost 22 years older than the median age of the entire population and is almost 10 years older than the median age of people who are 25 and older i.e., 39+22 = 61, 51+10 = 61 Our data reveals the median age to be 59. 
+
+We looked at the census data for 2020. src: https://data.census.gov/table/ACSST5Y2020.S0101?q=age%20in%202020 imported as 2020_census_age.csv in 'data' folder. The census data explicitly mentions 39 to be the median data in their csv table.
+
+We imported the census 2020 data and wanted to check the median age for people 25 and above. The 'united_states_total_estimate' column has the population for each age group. However, these have commas in them and the code reveals its a in character format. We removed the commas/any non numeric data and coerced it into a numeric data type. However, filtering just the 25 and above data groups returns a file with no observations. Not sure why that is. Maybe we would also have to account for how many people there are in each age group to find a weighted median, unsure how to proceed with that.] 
 
 ```{r}
 # Put code to reverse engineer sentence here
@@ -65,12 +69,6 @@ congress_age |>
 # Display results of code below this codeblock
 58.98563
 ```
-
-### Sentence 2
-
-* **Sentence text**: [According to the 2020 census, the median age of the entire U.S. population was about 39, and **among those 25 and older, it was 51 **]
-* **Analysis summary**: [We imported the census 2020 data and wanted to check the median age for people 25 and above. The 'united_states_total_estimate' column has the population for each age group. However, these have commas in them and the code reveals its a in character format. We removed the commas/any non numeric data and coerced it into a numeric data type. However, filtering just the 25 and above data groups returns a file with no observations. Not sure why that is. Maybe we would also have to account for how many people there are in each age group to find a weighted median, unsure how to proceed with that.]
-
 ```{r}
 # Put code to reverse engineer sentence here
 census_2020_age <- read_csv("data/2020_census_age.csv")
@@ -89,7 +87,7 @@ cleaned_census_2020_age <- cleaned_census_2020_age |>
          )
 str(cleaned_census_2020_age)
 glimpse(cleaned_census_2020_age)
-#population is now numeric without commas 
+#population is now numeric without commas
 ```
 ```{r}
 data_filtered <- cleaned_census_2020_age  |>
@@ -100,8 +98,45 @@ data_filtered <- cleaned_census_2020_age  |>
     "70 to 74 years", "75 to 79 years", "80 to 84 years", 
     "85 years and over"
   ))
-# Display results of code below this codeblock
 ```
+
+### Sentence 2
+
+* **Sentence text**: [*Forty-eight percent of the current Congress is made up of boomers,* even though they only represented about 21 percent of the population in the most recent census. *And this actually represents a decline in representation for boomers, who made up 63 percent of Congress in the mid-2010s*]
+
+* **Analysis summary**: [We'll be able to confirm that 48.32% of members in the current Congress (118th Congress) are made up of boomers. Similarly, we can also confirm that 62.84% of members in the mid-2010s Congress (114th Congress which started in 2015) were made up of boomers.]
+
+```{r}
+# Put code to reverse engineer sentence here
+congress_age |>
+  filter(congress == "118") |>
+  summarise(
+    count_118 = n()
+  )
+congress_age |>
+  filter(congress == "118") |>
+  filter(generation == "Boomers") |>
+  summarise(
+    count_118_boomers = n()
+  )
+(259/536)*100
+congress_age |>
+  filter(congress == "114") |>
+  summarise(
+    count_114 = n()
+  )
+congress_age |>
+  filter(congress == "114") |>
+  filter(generation == "Boomers") |>
+  summarise(
+    count_114_boomers = n()
+  )
+(340/541)*100
+# Display results of code below this codeblock
+# The percentage of boomers in the 118th Congress is 48.3209
+# The percentage of boomers in the mid-2010s Congress (114th Congress started in 2015) was 62.84
+```
+
 ### Sentence 3
 
 * **Sentence text**: [Paste in sentence to engineer here]
