@@ -28,8 +28,11 @@ Loading required libraries for this analysis.
 install.packages('tidyverse')
 install.packages('rmarkdown')
 install.packages('janitor')
+install.packages('lubridate')
 library(tidyverse)
+library(rmarkdown)
 library(janitor)
+library(lubridate)
 ```
 
 ## Load and Cleaning Data
@@ -50,14 +53,14 @@ In this notebook, we are reverse engineering five sentences from the story.
 
 ### Sentence 1
 
-* **Sentence text**: [According to the 2020 census, the median age of the entire U.S. population was about 39, and among those 25 and older, it was 51 — *almost 22 and 10 years younger, respectively, than the median member of the 116th Congress was at the time.*]
+* **Sentence text**: [According to the 2020 census,*the median age of the entire U.S. population was about 39, and among those 25 and older, it was 51 —* *almost 22 and 10 years younger, respectively, than the median member of the 116th Congress was at the time.*]
 * 
 
 **Analysis summary**: [We were able to confirm that the median age of 116th congress is almost 22 years older than the median age of the entire population and is almost 10 years older than the median age of people who are 25 and older i.e., 39+22 = 61, 51+10 = 61 Our data reveals the median age to be 59. 
 
 We looked at the census data for 2020. src: https://data.census.gov/table/ACSST5Y2020.S0101?q=age%20in%202020 imported as 2020_census_age.csv in 'data' folder. The census data explicitly mentions 39 to be the median data in their csv table.
 
-We imported the census 2020 data and wanted to check the median age for people 25 and above. The 'united_states_total_estimate' column has the population for each age group. However, these have commas in them and the code reveals its a in character format. We removed the commas/any non numeric data and coerced it into a numeric data type. However, filtering just the 25 and above data groups returns a file with no observations. Not sure why that is. Maybe we would also have to account for how many people there are in each age group to find a weighted median, unsure how to proceed with that.] 
+We imported the census 2020 data and wanted to check the median age for people 25 and above. The 'united_states_total_estimate' column has the population for each age group. However, these have commas in them and the code reveals its a in character format. We removed the commas, coerced it into a numeric data type, and filter just the 25 and above data groups. Nonetheless, since we don't have the age of each individual person but have only number of each of age group range, we're unsure how to proceed with that to find the median age.]
 
 ```{r}
 # Put code to reverse engineer sentence here
@@ -82,16 +85,15 @@ glimpse(cleaned_census_2020_age)
 ```{r}
 #the united_states_total_estimate column is chr
 cleaned_census_2020_age <- cleaned_census_2020_age |>
-  mutate(population = as.numeric(str_remove_all("united_states_total_estimate", "[^0-9]"))
-         #removing anything that is not a digit
-         )
-str(cleaned_census_2020_age)
+  mutate(population = str_remove_all(united_states_total_estimate, ",")) |> #remove the commas
+  mutate(population = as.numeric(population))
 glimpse(cleaned_census_2020_age)
 #population is now numeric without commas
 ```
 ```{r}
-data_filtered <- cleaned_census_2020_age  |>
-  filter(`Label (Grouping)` %in% c(
+cleaned_census_2020_age  |>
+  mutate(label_grouping = str_trim(label_grouping)) |>
+  filter(label_grouping %in% c(
     "25 to 29 years", "30 to 34 years", "35 to 39 years", 
     "40 to 44 years", "45 to 49 years", "50 to 54 years",
     "55 to 59 years", "60 to 64 years", "65 to 69 years", 
@@ -99,7 +101,6 @@ data_filtered <- cleaned_census_2020_age  |>
     "85 years and over"
   ))
 ```
-
 ### Sentence 2
 
 * **Sentence text**: [*Forty-eight percent of the current Congress is made up of boomers,* even though they only represented about 21 percent of the population in the most recent census. *And this actually represents a decline in representation for boomers, who made up 63 percent of Congress in the mid-2010s*]
@@ -139,26 +140,126 @@ congress_age |>
 
 ### Sentence 3
 
-* **Sentence text**: [Paste in sentence to engineer here]
-* **Analysis summary**: [Write up two to three sentences describing the results of your analysis.  Were you able to confirm the finding? If not, why not?]
+* **Sentence text**: [Thanks to their size, baby boomers have been an especially long-lasting force in congressional politics. *Boomers are now in their 25th consecutive Congress,4 but still make up about half the membership,* putting them well ahead of earlier generations. *In its 25th Congress, the Silent Generation only made up about one-third of Congress,* *while the earlier Lost Generation made up only around a quarter at the same point.*5]
+
+* **Analysis summary**: [The result can confirm the findings stated in the story. The proportion of Boomers in its 25th Congress is about half of all members (48.329%). The proportion of Silent Generation in its 25th Congress was about one-third of all members (32.06%). The proportion of Lost Generation in its 25th Congress was about a quarter of all members (11.05%).]
 
 ```{r}
 # Put code to reverse engineer sentence here
+#Find the proportion of Boomers in its 25th congress which I assume that is the current congress (118th congress) as the story said that Boomer are 'now' in their 25th Congress. 
+congress_age |>
+  filter(congress == "118") |>
+  summarise(
+    count_118 = n()
+  )
+congress_age |>
+  filter(congress == "118") |>
+  filter(generation == "Boomers") |>
+  summarise(
+    count_118_boomers = n()
+  )
+(259/536)*100
+
+#Find the proportion of Silent Generation in its 25th congress
+#Find its 25th congress first 
+congress_age |>
+  filter(generation == "Silent") |>
+  group_by(congress) |>
+  summarise(
+    count_congress = n())
+#This could mean first appearance of Silent Generation in Congress was in 86th Congress, so the 25th appearance was in 110th congress 
+congress_age |>
+  filter(congress == "110") |> 
+  summarise(
+    count_110 = n()
+  )
+congress_age |>
+  filter(congress == "110") |>
+  filter(generation == "Silent") |>
+  summarise(
+    count_110_silent = n())
+(176/549)*100
+
+#Find the proportion of Lost Generation in its 25th congress
+#Find its 25th congress first 
+congress_age |>
+  filter(generation == "Lost") |>
+  group_by(congress) |>
+  summarise(
+    count_congress = n())
+#This could mean first appearance of Lost Generation in Congress was in 66th Congress, so the 25th appearance was in 90th congress 
+congress_age |>
+  filter(congress == "90") |> 
+  summarise(
+    count_90 = n()
+  )
+congress_age |>
+  filter(congress == "90") |>
+  filter(generation == "Lost") |>
+  summarise(
+    count_90_lost = n())
+(60/543)*100
 
 # Display results of code below this codeblock
-
+#The proportion of Boomers in its 25th congress is 48.3209%
+#The proportion of Silent Generation in its 25th congress was 32.05829%
+#The proportion of Lost Generation in its 25th congress was 11.04972%
 ```
 
 ### Sentence 4
 
-* **Sentence text**: [Paste in sentence to engineer here]
-* **Analysis summary**: [Write up two to three sentences describing the results of your analysis.  Were you able to confirm the finding? If not, why not?]
+* **Sentence text**: [But on top of the baby boomers’ outsized congressional representation, they’re also older than their predecessors in the Lost, Greatest and Silent generations were when those groups held the most sway on Capitol Hill. *When boomers became a plurality of Congress in 2001, their median age was nearly 49,* *six years older than the Silent Generation was when it became the largest generational cohort in 1979.* *And while the Silent Generation’s median age was 59 just before the boomers surpassed it in Congress,* *today the boomers’ median age is a whopping 66.* It’s no wonder, then, that Congress is notably older today.]
+
+* **Analysis summary**: [The result confirms the findings stated in the story. The median age of Boomers in the 2001 Congress was 48.55, which is 5.49 years older than the median age of the Silent Generation in the 1979 Congress (43.06). In the 116th Congress, which was the year before the number of Boomers exceeded the number of Silent Generation, the median age of the Silent Generation in that year's Congress was 59.18. And the median age of Boomers in the 106th Congress is 66.33.]
 
 ```{r}
 # Put code to reverse engineer sentence here
+#Find the median age of Boomers in 2001 Congress.
+congress_age |>
+  filter(start_date == "2001-01-03") |>
+  filter(generation == "Boomers") |>
+  summarise(
+    med_age_boomer = median(age_years)
+  )
+
+#Find the median age of Silent Generation in 1979 Congress.
+congress_age |>
+  filter(start_date == "1979-01-03") |>
+  filter(generation == "Silent") |>
+  summarise(
+    med_age_silent = median(age_years)
+  )
+
+#Confirm that in the year before number of Boomers surpassed the number of Silent Generation, the median age of Silent Generation in that year's Congress is 59. 
+#Find that year first
+congress_age |>
+  group_by(congress, generation) |>
+  summarise(
+    count_cong_gen = n()
+  ) |>
+  filter(generation %in% c("Silent", "Boomers"))
+#Found that 106th Congress was the last congress that there were more Silent (252) than Boomers (251)
+#Find the median age of Silent Generation in 106th Congress.
+congress_age |>
+  filter(congress == "106") |>
+  filter(generation == "Silent") |>
+  summarise(
+    med_age_silent = median(age_years)
+  )
+
+#Find the median age of Boomers in today Congress.
+congress_age |>
+  filter(congress == "118") |>
+  filter(generation == "Boomers") |>
+  summarise(
+    med_age_boomer = median(age_years)
+  )
 
 # Display results of code below this codeblock
-
+#The median age of Boomers in 2001 Congress was 48.55.
+#The median age of the Silent Generation in the 1979 Congress was 43.06.
+#In the 116th Congress which was the year before the number of Boomers surpassed the number of the Silent Generation, the median age of the Silent Generation in that year's Congress was 59.18.
+#The median age of Boomers in the 106th Congress is 66.33.
 ```
 
 ### Sentence 5
@@ -172,5 +273,3 @@ congress_age |>
 # Display results of code below this codeblock
 
 ```
-
--30-
