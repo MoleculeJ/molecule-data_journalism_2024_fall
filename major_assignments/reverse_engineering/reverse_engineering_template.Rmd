@@ -134,6 +134,7 @@ congress_age |>
   )
 (340/541)*100
 # Display results of code below this codeblock
+
 # The percentage of boomers in the 118th Congress is 48.3209
 # The percentage of boomers in the mid-2010s Congress (114th Congress started in 2015) was 62.84
 ```
@@ -201,6 +202,7 @@ congress_age |>
 (60/543)*100
 
 # Display results of code below this codeblock
+
 #The proportion of Boomers in its 25th congress is 48.3209%
 #The proportion of Silent Generation in its 25th congress was 32.05829%
 #The proportion of Lost Generation in its 25th congress was 11.04972%
@@ -256,6 +258,7 @@ congress_age |>
   )
 
 # Display results of code below this codeblock
+
 #The median age of Boomers in 2001 Congress was 48.55.
 #The median age of the Silent Generation in the 1979 Congress was 43.06.
 #In the 116th Congress which was the year before the number of Boomers surpassed the number of the Silent Generation, the median age of the Silent Generation in that year's Congress was 59.18.
@@ -264,12 +267,72 @@ congress_age |>
 
 ### Sentence 5
 
-* **Sentence text**: [Paste in sentence to engineer here]
-* **Analysis summary**: [Write up two to three sentences describing the results of your analysis.  Were you able to confirm the finding? If not, why not?]
+* **Sentence text**: [Don’t expect such unfamiliarity to change anytime soon: As it turns out, Congress today is older than it’s ever been.*Across all senators and representatives, the median age of the 118th Congress is 59 years old.* 
+*The median senator is 65 years old, a record high;* *the median representative is about 58,* *for the fourth Congress in a row.1* Congress has notably aged since 2001:*From 1919 to 1999, the median senator never eclipsed 60 years old* 
+*and the median representative never surpassed 55.2* ]
+
+* **Analysis summary**: [The result confirms the findings stated in the story. The median age of all members in the 118th Congress is 59.07, and the median age of that Congress's senators, and representatives are 65.26 and 57.84 respectively. In addition, the median age of representatives in three previous Congress are 58.23, 57.83, and 58.13 respectively. Lastly, the median age of senators from each Congress that was in 1919 to 1999 spanned from 51.68 to 59.91 (never eclipsed 60), and the median age of senators from each Congress in that same interval spanned from 48.36 to 54.51 (never surpassed 55.2).]
 
 ```{r}
 # Put code to reverse engineer sentence here
+#Find the median age of 118th Congress
+congress_age |>
+  filter(congress == "118") |>
+  summarise(
+    count_med_age = median(age_years)
+  )
+
+#Find the median age of 118th Congress's senators.
+congress_age |>
+  filter(congress == "118") |>
+  filter(chamber == "Senate") |>
+  summarise(
+    count_med_age = median(age_years)
+  )
+
+#Find the median age of 118th Congress's representatives.
+congress_age |>
+  filter(congress == "118") |>
+  filter(chamber == "House") |>
+  summarise(
+    count_med_age = median(age_years)
+  )
+
+#Find the median age of representatives in three previous Congress.
+congress_age |>
+  filter(congress %in% c("117", "116", "115")) |>
+  filter(chamber == "House") |>
+  group_by(congress) |>
+  summarise(
+    count_med_age = median(age_years)
+  )
+
+#Find the median age of senators from each Congress that were in 1919 - 1999. 
+congress_age |>
+  filter(start_date <= "1999-01-03") |>
+  filter(chamber == "Senate") |>
+  group_by(congress) |>
+  summarise(
+    count_med_age = median(age_years)
+  ) |>
+  arrange(desc(count_med_age))
+  
+#Find the median age of representatives from each Congress that were in 1919 - 1999. 
+congress_age |>
+  filter(start_date <= "1999-01-03") |>
+  filter(chamber == "House") |>
+  group_by(congress) |>
+  summarise(
+    count_med_age = median(age_years)
+  ) |>
+  arrange(desc(count_med_age))
 
 # Display results of code below this codeblock
 
+#The median age of 118th Congress is 59.07.
+#The median age of 118th Congress's senators is 65.26.
+#The median age of 118th Congress's representatives is 57.84.
+#The median age of 117th, 116th, and 115th Congress representatives is 58.23, 57.83, and 58.13 respectively.
+#The median age of senators from each Congress that was in 1919 to 1999 spanned from 51.68 to 59.91.
+#The median age of representatives from each Congress that was in 1919 to 1999 spanned from 48.36 to 54.51.
 ```
