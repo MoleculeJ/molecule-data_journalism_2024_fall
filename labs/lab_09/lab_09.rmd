@@ -1,0 +1,188 @@
+---
+title: "lab_09.Rmd"
+author: "Molecule Jongwilai"
+date: "2024-10-30"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## You will need
+
+-   A Datawrapper account
+-   Election data in CSV files in the `data` folder
+-   Tidycensus
+
+## Load libraries and establish settings
+
+**Task** Create a codeblock and load appropriate packages and settings for this lab.
+
+```{r}
+# load libraries here
+library(tidycensus)
+library(tidyverse)
+library(janitor)
+```
+
+## Questions
+
+**Q1.** You're interested in seeing how the methods of voting have changed in Maryland since 2018. Using the `md_votes_by_type.csv` that has data from the top of the ticket (governor in 2018 and 2022, president in 2020), make a chart showing the percentage of votes cast in each category - early voting, election day and mail - over the three years. You'll need to make those percentages in R and then export the CSV using `write_csv`, then make the chart in Datawrapper. Have a title, description and source that tells readers about the data. The title and description should highlight the most newsworthy or important aspect.
+
+HINT: In Datawrapper's "Check and Describe" tab, you can click on a column to get the option of "hiding" it in any visualization.
+
+What do you think the story here is? Put the answer below along with the URL of your chart.
+
+**A1.** 
+- I think one of the most obvious phenomena that this data set reveals and can be the story is the change in election day voting that plummeted significantly in the 2020 election to 14.4% while mailing voting soared up to 49.5% (I guess it was because of COVID 19). Then two years later, the election day voting increased to 59.1% or back to almost at the same point as it did in 2018 (64.3%) while mailing voting dropped to 19.3%.
+- https://www.datawrapper.de/_/jGfWK/?v=2 
+
+```{r}
+#Recheck the percentage, select and rename the columns. 
+md_votes_by_type <- read_csv("data/md_votes_by_type.csv")
+md_votes_by_type |>
+  mutate(pct_early_check = (Early/Total)*100) |>
+  mutate(pct_ele_check = (`Election Day`/Total)*100) |>
+  mutate(pct_mail_check = (Mail/Total)*100) 
+md_votes_by_type <- md_votes_by_type |> 
+  select(Year, pct_early, pct_election_day, pct_mail) |>
+  rename(`Early Voting` = pct_early, `Election Day` = pct_election_day, `Mail Voting` = pct_mail)
+
+#Export to CSV.
+write_csv(md_votes_by_type, "data/md_votes_by_type_for_chart.csv")
+```
+
+**Q2.** You've been assigned to track early-voting turnout in Maryland at the county level. To do that, use [data from the state](https://elections.maryland.gov/press_room/2024_stats/PG24/EarlyVoting%20RAW%20data.csv). YOU DO NOT NEED TO LOAD THIS FILE. I've created several CSV files from it; each has a row for each day, with the counties as columns, so you can track early voting turnout in certain categories. The available files in the data folder are:
+
+* ev_totals_18_24.csv - early voting turnout by the 18-24 age group
+* ev_totals_65_up.csv - early voting turnout by the 65+ age group
+* ev_totals_rep.csv - early voting turnout by Republicans
+* ev_totals_dem.csv - early voting turnout by Democrats
+* ev_totals_una.csv - early voting turnout by unaffiliated voters
+* ev_totals_women.csv - early voting turnout by women
+* ev_totals_men.csv - early voting turnout by men
+
+Which file you use to make your chart, and what kind of chart is up to you (but it MUST be a chart, not a map or table), so experiment to see what works best. Since we have data over time, you might start with a line chart, but you might not end up there. You can display all counties, or just some of them - to limit the number of counties, you'll need to write code to select only the columns that you need and then use `write_csv()` to export the dataframe to a CSV file that you'll use in Datawrapper.
+
+Your chart MUST: 
+
+\* Have a title, description and source that tells readers about the data. The title and description should highlight the most newsworthy or important aspect. 
+\* Easily readable labels and values 
+\* Be published
+\* Put the question you chose to answer below along, with the URL of your chart.
+
+Tell me below why you picked the CSV you did. If you made any changes to the data, put that code below.
+
+**A2.**
+- My question is "In the counties where people go to cast the early votes the most, voters from which parties dominate?" As my question is mainly about the parties, I choose to work on the data set from "early voting turnout by Republicans, Democrats, and Unaffiliated Voters" CSV.   
+- https://www.datawrapper.de/_/2pzxP/
+
+```{r}
+#Look into early-voting turnout data by parties.
+rep <- read_csv("data/ev_totals_rep.csv")
+dem <- read_csv("data/ev_totals_dem.csv")
+una <- read_csv("data/ev_totals_una.csv")
+
+#Find the total of early-voting turnout at county level in 6 days of each party.
+total_rep <- rep |>
+  pivot_longer(cols = -Day, names_to = "county", values_to = "values") |>
+  pivot_wider(names_from = Day, values_from = values) |> 
+  mutate(total_rep = Day1+Day2+Day3+Day4+Day5+Day6) |>
+  select(county, total_rep)
+
+total_dem <- dem |>
+  pivot_longer(cols = -Day, names_to = "county", values_to = "values") |>
+  pivot_wider(names_from = Day, values_from = values) |> 
+  mutate(total_dem = Day1+Day2+Day3+Day4+Day5+Day6) |>
+  select(county, total_dem)
+
+total_una <- una |>
+  pivot_longer(cols = -Day, names_to = "county", values_to = "values") |>
+  pivot_wider(names_from = Day, values_from = values) |> 
+  mutate(total_una = Day1+Day2+Day3+Day4+Day5+Day6) |>
+  select(county, total_una)
+
+#Join the dataframe
+parties_early_votes <- total_rep |> 
+  inner_join(total_dem, join_by(county))
+parties_early_votes <- parties_early_votes |>
+  inner_join(total_una, join_by(county))
+
+#Find the total of early-voting turnout from every parties in each county, calculate the percentage of each party's early-voting turnout, and scope down to see only ten counties that have the biggest number of total early-voting turnout.  
+parties_early_votes_for_chart <- parties_early_votes |>
+  mutate(total_all = total_rep + total_dem + total_una) |>
+  mutate(percent_rep = (total_rep/total_all)*100) |>
+  mutate(percent_dem = (total_dem/total_all)*100) |>
+  mutate(percent_una = (total_una/total_all)*100) |>
+  arrange(desc(total_all)) |>
+  filter(total_all > 24000) |>
+  select(county, percent_rep, percent_dem, percent_una)
+
+#Export to CSV. 
+write_csv(parties_early_votes_for_chart, "data/parties_early_votes_for_chart.csv")
+```
+
+**Q3.** After reading the recent CNN story about fundraising called "[How elderly dementia patients are unwittingly fueling political campaigns](https://www.cnn.com/interactive/2024/10/politics/political-fundraising-elderly-election-invs-dg/)," you decide to dig into the habits of Maryland political donors who give money via ActBlue and WinRed.
+
+You want to show Maryland's political geography - where those donors live - and the frequency of donations. To do that, you'll load in two CSV files: `md_winred_zip_totals.csv` and `md_actblue_zip_totals.csv`.
+
+You also will need to get population by zip code for Maryland - we did a similar thing in a previous lab, but this time you want the total population as your variable. Use tidycensus to do that, and save that dataframe, then join it to each of your contribution dataframes - you will need to make sure that the zip codes you're joining on are the same datatype.
+
+In each dataframe, use the _number of donations_ to calculate a per capita rate of the number of donations per 1,000 population for each zip code using `mutate()`. Calculating a rate works like this: it's the thing you're counting divided by the population times the "per" number.
+
+Then export each dataframe using `write_csv` and make two (2) choropleth maps in Datawrapper. For each map, you will need to:
+
+-   Search for Maryland zip codes (use the 2020 data) as the base map
+-   Upload the CSV file
+-   Change the tooltip to show both the rate of donations and the total amount (you can put them side by side or put one under the other, as we did in the pre_lab). Make sure to properly format both numbers to make them readable.
+-   Have a title, description and source that tells readers about the data (the source is the Federal Election Commission, and the data covers Jan. 1, 2023 through Oct. 16, 2024). The title and description should highlight the most newsworthy or important aspect.
+
+Compare the two maps. What do you think are the most interesting story ideas in both, and what would you want to know more about? Put the answer below along with the URLs of your maps.
+
+**A3.** 
+- I think an interesting story idea from these two maps is more information about zip code areas that have predominantly high rates of donations for Republicans like 20677, 21659, and 21871, which have more than 2,000 donations per 1,000 population, and for Democrats like 21654 and 21010, which have more than 5,500 donations per 1,000 population. 
+- I want to know more about towns that are located in these zip codes area. How is the demography in terms of race or income of those towns, and as we learn from the CNN story that frequent donations may come from senior citizens who have dementia, I want to know more about the age group of the population in those towns.  
+- https://www.datawrapper.de/_/d7QSI/
+- https://www.datawrapper.de/_/aZdlh/
+
+```{r}
+#Download winred and actblue data
+winred <- read_csv("data/md_winred_zip_totals.csv")
+actblue <- read_csv("data/md_actblue_zip_totals.csv")
+
+#Get the population data from census
+#Find the variable for total population
+acs_2023_1y <- load_variables(
+  2023, dataset = "acs1", cache = FALSE)
+#Get data 
+md_zipcodes_population <- get_acs(geography="zcta", 
+                       variables = "B01003_001", 
+                       state='MD', year=2019)
+
+#Merge wninred and actblue with populatiob data
+#winred
+md_zipcodes_population <- md_zipcodes_population  |>
+  mutate(GEOID = as.numeric(GEOID))
+winred_with_population <- winred |>
+  inner_join(md_zipcodes_population, join_by(zip==GEOID))
+#actblue
+md_zipcodes_population <- md_zipcodes_population  |>
+  mutate(GEOID = as.numeric(GEOID))
+actblue_with_population <- actblue |>
+  inner_join(md_zipcodes_population, join_by(zip==GEOID))
+
+#Calculate per capita rate
+#winred
+winred_with_population_for_chart <- winred_with_population |>
+  select(zip, donations, estimate, total) |>
+  mutate(donations_per_1000 = (donations/estimate)*1000) 
+#actblue
+actblue_with_population_for_chart <- actblue_with_population |>
+  select(zip, donations, estimate, total) |>
+  mutate(donations_per_1000 = (donations/estimate)*1000) 
+
+#Export to CSV.
+write_csv(winred_with_population_for_chart, "data/winred_with_population_for_chart.csv")
+write_csv(actblue_with_population_for_chart, "data/actblue_with_population_for_chart.csv")
+```
