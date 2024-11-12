@@ -19,6 +19,10 @@ knitr::opts_chunk$set(echo = TRUE)
 **Task** Create a codeblock and load appropriate packages and settings for this lab.
 
 ```{r}
+install.packages('ggalt')
+library(ggalt)
+```
+```{r}
 # Turn off scientific notation
 options(scipen=999)
 
@@ -27,6 +31,7 @@ library(tidyverse)
 library(sf)
 library(janitor)
 library(tidycensus)
+library(ggalt)
 ```
 
 Let's explore the election results from last night and make some maps!
@@ -119,6 +124,9 @@ ggplot() +
     subtitle = "Trump gained more percentage votes in the presidential race than Hogan gained in the Senate race in 
 only Allegany out of all counties in Maryland.",
 caption = "The scale represents the difference between Trump's and Hogan's votes percentage of total votes.")
+
+ggplot() +
+  geom_dumbbell(data=hogan_trump_with_map, aes(y=County, x=percent_trump, xend=percent_hogan)) + theme_minimal()
 ```
 
 **Q3** Make another map showing the difference between Larry Hogan's county-level performance this year and from his governor race in 2018, using percentages to compare the two as you did in Q2. You can use the dataframe you initially loaded for Q1, and you'll need to load the 2018 governor results in the data folder and join them to it before proceeding. Are there any counties where Hogan did better this year? How would you describe the map showing the difference?
