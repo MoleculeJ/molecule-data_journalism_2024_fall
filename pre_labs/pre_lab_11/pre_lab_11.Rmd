@@ -36,7 +36,7 @@ Like so many R package names, rvest is a bad pun. You're supposed to read it to 
 library(rvest)
 library(tidyverse)
 library(janitor)
-#You should bring 'janitor' along every time you scrape things becuase you will want the column name to be changed.
+#You should bring 'janitor' along every time you scrape things because you will want the column name to be changed.
 ```
 
 For this example, we're going to work on loading a simple table of data from the Maryland State Board of Elections. This is a table of unofficial county-level election results for the Presidential race from the November general election.
