@@ -55,7 +55,7 @@ Q4. At the *Precinct level*
 4.2.2 How are those precincts different from others in terms of location, demography, economy, etc.?
 4.3 Compared to the total population of each precinct, what is the proportion of voters who register for the election? 
 4.3.1 What are the differences between precincts having large and small proportions of voter registration? 
-4.4 Compared to the election result, does the registration pattern match with the result?
+4.4 Compared to the presidential election result, does the registration pattern match with the result?
 ---
 Q5. At the *County level*
 5.1 How many voters registered for each party in the 2024 primary and general election?
@@ -190,7 +190,7 @@ legis_result_DEM <- legis_result_draft |>
 legis_result_GRN <- legis_result_draft |>
   filter(party == "GRN") |>
   select(3) |>
-  rename(GRN_result = 2) |>
+  rename(GRN_result = 2)
 legis_result_LIB <- legis_result_draft |>
   filter(party == "LIB") |>
   select(3) |>
@@ -216,7 +216,53 @@ legis_result <- bind_cols(legis_result_DEM, legis_result_GRN, legis_result_LIB, 
 ```{r}
 #Prep dataframe for Q4 focusing on legislative precinct level
 
-#I have that for this election from the state, and should have it for 2022 (will need to check). Start with county and district stuff first and we'll figure out if the precinct-level analysis will work.
+#Presidential Result Data
+precinct_result <- read_csv("data/precinct/precinct result.csv")
+precinct_result_DEM <- precinct_result |>
+  select(1, 2, 3, 4, 6, 7) |>
+  filter(Contest == "President and Vice President of the United States") |>
+  select(-1) |>
+  filter(Party == "DEM") |>
+  rename(total_votes_DEM = 5) |>
+  select(-4)
+precinct_result_REP <- precinct_result |>
+  select(1, 2, 3, 4, 6, 7) |>
+  filter(Contest == "President and Vice President of the United States") |>
+  select(-1) |>
+  filter(Party == "REP") |>
+  rename(total_votes_REP = 5) |>
+  select(-1,-2,-3,-4)
+precinct_result_LIB <- precinct_result |>
+  select(1, 2, 3, 4, 6, 7) |>
+  filter(Contest == "President and Vice President of the United States") |>
+  select(-1) |>
+  filter(Party == "LIB") |>
+  rename(total_votes_LIB = 5) |>
+  select(-1,-2,-3,-4)
+precinct_result_GRN <- precinct_result |>
+  select(1, 2, 3, 4, 6, 7) |>
+  filter(Contest == "President and Vice President of the United States") |>
+  select(-1) |>
+  filter(Party == "GRN") |>
+  rename(total_votes_GRN = 5) |>
+  select(-1,-2,-3,-4)
+precinct_result_UNF <- precinct_result |>
+  select(1, 2, 3, 4, 6, 7) |>
+  filter(Contest == "President and Vice President of the United States") |>
+  select(-1) |>
+  filter(Party == "UNF") |>
+  rename(total_votes_UNF = 5) |>
+  select(-1,-2,-3,-4)
+precinct_result_NON <- precinct_result |>
+  select(1, 2, 3, 4, 6, 7) |>
+  filter(Contest == "President and Vice President of the United States") |>
+  select(-1) |>
+  filter(Party == "NON") |>
+  rename(total_votes_NON = 5) |>
+  select(-1,-2,-3,-4)
+precinct_result_cleaned <- bind_cols(precinct_result_DEM, precinct_result_REP, precinct_result_LIB, precinct_result_GRN, precinct_result_UNF, precinct_result_NON)
+precinct_result_final <- precinct_result_cleaned |>
+  mutate(total_votes = total_votes_DEM + total_votes_REP + total_votes_LIB + total_votes_GRN + total_votes_UNF + total_votes_NON)
 ```
 
 
@@ -729,68 +775,1031 @@ congress_general_regis_result <- bind_cols(pattern_congress_general_24, represen
   select(-2,-3,-4,-5,-6)
 ```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+-------------------------------------------------------------------------------------------------
+
+*Deliverable 4* 
+
+- Shows a draft of data notebook in which you demonstrate substantial progress on the questions you set out to answer at the beginning of the project. This means you should have started on each of them, but you may not have finished.
+
+Q1. For the big picture, in *Maryland*,
+1.1 How many voters registered for each party in the 2024 primary and general election?
+*Answer: In the 2024 general elections, the registration totals were as follows: 2211316 registered for the Democratic Party, 1007384 for the Republican Party, 78234 for other parties, and 907638 were unaffiliated. In the primary elections, 2202830 registered for the Democrats, 994388 for the Republicans, 31418 for other parties, and 451465 were unaffiliated.*
+1.1.1 How have these numbers changed compared to those in previous elections?
+*Answer: Compared to the previous election (2020, the primary elections in 2024 saw a decline in registrations for the major parties, while other parties and unaffiliated registrants gained significant popularity. Specifically, the Democratic Party lost 1.24%, the Republican Party lost 1.45%, while other parties gained 44.95%, and unaffiliated registrations increased by 40.24%. This trend continued in the general elections, with the Democratic Party experiencing a 2.27% decrease, while the Republican Party saw a smaller drop of 0.82%. Similarly, other parties gained 21.54%, and unaffiliated registrations rose by 18.36%.*
+1.2 Compared to the total population of the state, what is the proportion of voters who register for the election?
+*Answer: In the primary elections, voter turnout was 59.72% of the total population, while in the general elections, it increased to 68.23%.*
+1.3 Compared to the 2024 presidential election result, does the registration pattern match with the result?
+*Answer: By comparing the general party registrations in Maryland for 2024 with the presidential election results, it is notable that the number of actual voters for most parties and the unaffiliated group sharply decreased. The exception to this trend is the Republican Party, which gained 19,258 more votes than the number of registrations. In contrast, the Democratic Party saw a significant decline, losing 350,372 voters in the election compared to their registrations.*
+
+```{r}
+#Prep dataframe for Q1 focusing on Maryland
+#Registration Data
+md_primary_24 <- read_csv("data/county/county_primary_24.csv")
+md_general_24 <- read_csv("data/county/county_general_24.csv")
+md_primary_20 <- read_csv("data/county/county_primary_20.csv")
+md_primary_20 <- md_primary_20 |>
+  rename(County = 1)
+md_general_20 <- read_csv("data/county/county_general_20.csv")
+#Population Data
+state_population <- get_acs(geography="state", 
+                       variables = "B01003_001", 
+                       year=2022)
+md_population <- state_population |>
+  slice(21)
+#Presidential Election Result
+pres_election_result_url <- "https://elections.maryland.gov/elections/2024/general_Results/gen_results_2024_1.html"
+pres_election_result_html <- pres_election_result_url |>
+  read_html() |>
+  html_table()
+pres_election_result <- pres_election_result_html[[1]]
+pres_election_result <- pres_election_result |> clean_names()
+pres_election_result <- pres_election_result |>
+    slice(-c(34, 35))
+```
+```{r}
+#voters registered for each party in 2024 primary election
+total_md_primary_24 <- md_primary_24 |> 
+    mutate(OTH = OTH + NLM + LIB) |>
+  summarise(
+    DEM_tot = sum(DEM),
+    REP_tot = sum(REP),
+    OTH_tot = sum(OTH),
+    UNA_tot = sum(UNA)
+  )
+```
+```{r}
+#voters registered for each party in 2024 general election
+total_md_general_24 <- md_general_24 |> 
+  mutate(OTH = OTH + GRN + NLM + LIB) |> 
+summarise(
+    DEM_tot = sum(DEM),
+    REP_tot = sum(REP),
+    OTH_tot = sum(OTH),
+    UNA_tot = sum(UNA)
+  )
+```
+```{r}
+#voters registered for each party in 2020 primary election
+total_md_primary_20 <- md_primary_20 |>
+  mutate(OTH = OTH + BAR + WCP) |>
+  summarise(
+    DEM_tot = sum(DEM),
+    REP_tot = sum(REP),
+    OTH_tot = sum(OTH),
+    UNA_tot = sum(UNA)
+  )
+```
+```{r}
+#voters registered for each party in 2020 general election
+total_md_general_20 <- md_general_20 |>
+  mutate(OTH = OTH + BAR + WCP + GRN + LIB) |>
+  summarise(
+    DEM_tot = sum(DEM),
+    REP_tot = sum(REP),
+    OTH_tot = sum(OTH),
+    UNA_tot = sum(UNA)
+  )
+```
+```{r}
+#How have these numbers changed compared to those in previous elections?*
+total_md_primary_24 <- total_md_primary_24 |> 
+  mutate(Year = 2024)
+total_md_general_24 <- total_md_general_24 |> 
+  mutate(Year = 2024)
+total_md_primary_20 <- total_md_primary_20 |> 
+  mutate(Year = 2020)
+total_md_general_20 <- total_md_general_20 |> 
+  mutate(Year = 2020)
+comparison_general <- bind_rows(total_md_general_24, total_md_general_20) |>
+select(Year, everything())
+comparison_primary <- bind_rows(total_md_primary_24, total_md_primary_20) |>
+select(Year, everything())
+```
+```{r}
+#percentage difference between 2024 and 2022 per each party in geenral elections
+comparison_general <- comparison_general|>
+    mutate(
+    DEM_pct_diff = (DEM_tot[1] - DEM_tot[2]) / DEM_tot[2] * 100,
+    REP_pct_diff = (REP_tot[1] - REP_tot[2]) / REP_tot[2] * 100,
+    OTH_pct_diff = (OTH_tot[1] - OTH_tot[2]) / OTH_tot[2] * 100,
+    UNA_pct_diff = (UNA_tot[1] - UNA_tot[2]) / UNA_tot[2] * 100
+  )
+```
+```{r}
+#percentage difference between 2024 and 2022 per each party in primary elections
+comparison_primary <- comparison_primary|>
+    mutate(
+    DEM_pct_diff = (DEM_tot[1] - DEM_tot[2]) / DEM_tot[2] * 100,
+    REP_pct_diff = (REP_tot[1] - REP_tot[2]) / REP_tot[2] * 100,
+    OTH_pct_diff = (OTH_tot[1] - OTH_tot[2]) / OTH_tot[2] * 100,
+    UNA_pct_diff = (UNA_tot[1] - UNA_tot[2]) / UNA_tot[2] * 100
+  )
+```
+```{r}
+#voters registered for general 2024 in proportion to population
+proportion_md_general_24 <- md_general_24 |>
+  summarise(
+    total_voters = sum(TOTAL),
+    MD_pop = "6161707",
+    pct_voters = (total_voters / 6161707) *100
+  )
+```
+```{r}
+#voters registered for primary 2024 in proportion to population
+proportion_md_primary_24 <- md_primary_24 |>
+  summarise(
+    total_voters = sum(TOTAL),
+    MD_pop = "6161707",
+    pct_voters = (total_voters / 6161707) *100
+  )
+```
+```{r}
+#*1.3 Compared to the 2024 presidential election result, does the registration pattern match with the result?*
+party_elections_results <- pres_election_result |>
+  mutate(
+    total = as.numeric(gsub(",", "", total))  
+  ) |>
+  group_by(party) |> 
+  summarise(
+    Total_votes = sum(total)  
+  )
+party_elections_results <- party_elections_results |> 
+  mutate(
+    Total_votes = if_else(party == "Other Candidates", 
+                          Total_votes + sum(Total_votes[party %in% c("Green", "Libertarian")]), 
+                          Total_votes)
+  ) |> 
+  filter(!party %in% c("Green", "Libertarian"))
+```
+```{r}
+total_md_general_24_transformed <- total_md_general_24 |> 
+  pivot_longer(
+    cols = c(DEM_tot, REP_tot, OTH_tot, UNA_tot),  
+    names_to = "party",                          
+    values_to = "Total_votes"                   
+  ) |> 
+  mutate(
+    party = case_when(                           
+      party == "DEM_tot" ~ "Democratic",
+      party == "REP_tot" ~ "Republican",
+      party == "OTH_tot" ~ "Other Candidates",
+      party == "UNA_tot" ~ "Unaffiliated",
+      TRUE ~ party
+    )
+  ) |> 
+  select(party, Total_votes)
+```
+```{r}
+comparison_general_elections <- full_join(party_elections_results, total_md_general_24_transformed, by = "party") |>
+  rename(Total_election = Total_votes.x, Total_general = Total_votes.y) |>
+    mutate(
+    Difference = Total_election - Total_general 
+    )
+```
+
+Q2. At the *Congressional District level*
+2.1 How many voters registered for each party in the 2024 primary and general election?
+*A: For the 2024 Primary, there are 2,202,830 registrations for Democrats, 994,388 registrations for Republicans, 451,465 registrations for Unaffiliated, and 31,418 registrations for other parties. For 2024 General, there are 2,211,316 registrations for Democrats, 1,007,384 registrations for Republicans, 907,638 registrations for Unaffiliated, and 78,234 registrations for other parties.*
+2.1.1 How have these numbers changed compared to those in previous elections?
+*A: For the 2024 and 2020 Primary, the registration for Democrats decreased by 1.24%, Republicans decreased by 1.45%, Unaffiliated increased by 40.24%, and other parties increased by 44.96%. For 2024 and 2020 General, the registration for Democrats decreased by 2.28%, Republicans decreased by 0.83%, Unaffiliated increased by 18.37%, and other parties increased by 21.55%.*
+2.2 Are there any patterns for voter registration from every district?
+*A: For both Primary and General 2024, in most districts, there are registrations for Democrats more than registration for Republicans.*
+2.2.1 Are there any districts that don't fall into this pattern?
+*A: There is only District 1 where registration for Democrats is less than that of Republicans.*
+2.2.2 How are those districts different from others in terms of location, demography, economy, etc.?
+*A: It is all the area located on the east side of Chesapeake Bay.* 
+2.3 Compared to the total population of each district, what is the proportion of voters who register for the election? 
+*A: For both Primary and General, District 5 has the most proportion of registered voters which are 69.26% for Primary and 74.12% for General. In the other hand, District 4 has the least proportion of registered voters which are 52.02% for Primary and 58.34% for General* 
+2.3.1 What are the differences between district having large and small proportions of voter registration?
+*A: There is no significant difference.* 
+2.4 Compared to the representative race result, does the registration pattern match with the result?
+*A: Yes, the General registration pattern in every district is match with the pattern of the representative race result. There are more percentage of people who registered and votes for Democrats than those for Republicans in District 2 to 8, and on the contrary, there are more percentage of people who registered and votes for Republicans than those for Democrats in District 1.* 
+
+```{r}
+#Prep dataframe for Q2 focusing on congressional district level
+
+#Registration Data
+congress_primary_24 <- read_csv("data/congress_level/congress_primary_24.csv")
+congress_general_24 <- read_csv("data/congress_level/congress_general_24.csv")
+congress_primary_20 <- read_csv("data/congress_level/congress_primary_20.csv")
+congress_primary_20 <- congress_primary_20 |>
+  rename(District = 1) |>
+  rename(county = 2) |>
+  rename(BAR = 3) |>
+  rename(DEM = 4) |>
+  rename(OTH = 5) |>
+  rename(REP = 6) |>
+  rename(UNA = 7) |>
+  rename(WCP = 8) |>
+  rename(total = 9) 
+congress_general_20 <- read_csv("data/congress_level/congress_general_20.csv")
+
+#Population Data
+congress_population <- get_acs(geography="congressional district", 
+                       variables = "B01003_001", state = "MD", 
+                       year=2022)
+
+#Representative Election Result
+representative_election_result_url <- "https://elections.maryland.gov/elections/2024/general_Results/gen_results_2024_3.html"
+representative_election_result_html <- representative_election_result_url |>
+  read_html() |>
+  html_table()
+representative_election_result1 <- representative_election_result_html[[1]]
+representative_election_result2 <- representative_election_result_html[[2]]
+representative_election_result3 <- representative_election_result_html[[3]]
+representative_election_result4 <- representative_election_result_html[[4]]
+representative_election_result5 <- representative_election_result_html[[5]]
+representative_election_result6 <- representative_election_result_html[[6]]
+representative_election_result7 <- representative_election_result_html[[7]]
+representative_election_result8 <- representative_election_result_html[[8]]
+```
+```{r}
+#Primary
+#2024
+count_congress_primary_24 <- congress_primary_24 |>
+  summarise(
+    DEM = sum(DEM),
+    REP = sum(REP),
+    LIB = sum(LIB),
+    OTH = sum(OTH),
+    UNA = sum(UNA),
+    NLM = sum(NLM)
+  ) |>
+  mutate(Other = LIB+OTH+NLM) |>
+  select(DEM, REP, UNA, Other) |>
+  rename(DEM24 = 1, REP24 =2, UNA24 = 3, Other24 = 4)
+#2020
+count_congress_primary_20 <- congress_primary_20 |>
+  summarise(
+    DEM = sum(DEM),
+    REP = sum(REP),
+    OTH = sum(OTH),
+    UNA = sum(UNA),
+    BAR = sum(BAR),
+    WCP = sum(WCP)
+  ) |>
+  mutate(Other = OTH+BAR+WCP) |>
+  select(DEM, REP, UNA, Other) |>
+  rename(DEM20 = 1, REP20 =2, UNA20 = 3, Other20 = 4)
+#Find the change
+compare_congress_primary_24_20 <- bind_cols(count_congress_primary_24, count_congress_primary_20) |>
+  mutate(DEM_change = ((DEM24-DEM20)/DEM20)*100) |>
+  mutate(REP_change = ((REP24-REP20)/REP20)*100) |>
+  mutate(UNA_change = ((UNA24-UNA20)/UNA20)*100) |>
+  mutate(Other_change = ((Other24-Other20)/Other20)*100)
+
+#General
+#2024
+count_congress_general_24 <- congress_general_24 |>
+  summarise(
+    DEM = sum(DEM),
+    REP = sum(REP),
+    LIB = sum(LIB),
+    OTH = sum(OTH),
+    UNA = sum(UNA),
+    NLM = sum(NLM),
+    GRN = sum(GRN)
+  ) |>
+  mutate(Other = LIB+OTH+NLM+GRN) |>
+  select(DEM, REP, UNA, Other) |>
+  rename(DEM24 = 1, REP24 =2, UNA24 = 3, Other24 = 4)
+#2020
+count_congress_general_20 <- congress_general_20 |>
+  summarise(
+    DEM = sum(DEM),
+    REP = sum(REP),
+    BAR = sum(BAR),
+    GRN = sum(GRN),
+    LIB = sum(LIB),
+    WCP = sum(WCP),
+    OTH = sum(OTH),
+    UNA = sum(UNA)
+  ) |>
+  mutate(Other = OTH+BAR+GRN+LIB+WCP) |>
+  select(DEM, REP, UNA, Other) |>
+  rename(DEM20 = 1, REP20 =2, UNA20 = 3, Other20 = 4)
+#Find the change
+compare_congress_general_24_20 <- bind_cols(count_congress_general_24, count_congress_general_20) |>
+  mutate(DEM_change = ((DEM24-DEM20)/DEM20)*100) |>
+  mutate(REP_change = ((REP24-REP20)/REP20)*100) |>
+  mutate(UNA_change = ((UNA24-UNA20)/UNA20)*100) |>
+  mutate(Other_change = ((Other24-Other20)/Other20)*100)
+
+#Find Pattern
+#Primary24
+pattern_congress_primary_24 <- congress_primary_24 |>
+  mutate(Other = LIB+OTH+NLM) |>
+  select(District, DEM, REP, UNA, Other, TOTAL) |>
+  mutate(DEM_per = (DEM/TOTAL)*100) |>
+  mutate(REP_per = (REP/TOTAL)*100) |>
+  mutate(UNA_per = (UNA/TOTAL)*100) |>
+  mutate(Other_per = (Other/TOTAL)*100)
+#General24
+pattern_congress_general_24 <- congress_general_24 |>
+  mutate(Other = LIB+OTH+NLM+GRN) |>
+  select(District, DEM, REP, UNA, Other, TOTAL) |>
+  mutate(DEM_per = (DEM/TOTAL)*100) |>
+  mutate(REP_per = (REP/TOTAL)*100) |>
+  mutate(UNA_per = (UNA/TOTAL)*100) |>
+  mutate(Other_per = (Other/TOTAL)*100)
+
+#Compare to Population
+#Primary24
+total_congress_primary_24 <- congress_primary_24 |>
+  select(District, TOTAL)
+cleaned_congress_population <- congress_population |>
+  rename(population = 4) |>
+  select(4)
+regis_population_congress_primary_24 <- bind_cols(total_congress_primary_24, cleaned_congress_population) |>
+  mutate(Percent = (TOTAL/population)*100)
+#General24
+total_congress_general_24 <- congress_general_24 |>
+  select(District, TOTAL)
+regis_population_congress_general_24 <- bind_cols(total_congress_general_24, cleaned_congress_population) |>
+  mutate(Percent = (TOTAL/population)*100)
+
+#Compare to the result
+#Clean the result
+representative_election_result1 <- representative_election_result1 |>
+  slice(-5) |>
+  select(1, 8) |>
+  pivot_longer(cols = -Name, names_to = "Party", values_to = "values") |>
+  pivot_wider(names_from = Name, values_from = values) |>
+  rename(DEM_percent_result = 2, REP_percent_result = 3, x = 4, y = 5) |>
+  mutate(DEM_percent_result = as.numeric(gsub("%","", DEM_percent_result)))|>
+  mutate(REP_percent_result = as.numeric(gsub("%","", REP_percent_result)))|>
+  mutate(x = as.numeric(gsub("%","", x))) |>
+  mutate(y = as.numeric(gsub("%","", y))) |>
+  mutate(Other_percent_result = x+y) |>
+  select(1,2,3,6)
+representative_election_result2 <- representative_election_result2 |>
+  slice(-5) |>
+  select(1, 8) |>
+  pivot_longer(cols = -Name, names_to = "Party", values_to = "values") |>
+  pivot_wider(names_from = Name, values_from = values) |>
+  rename(DEM_percent_result = 2, REP_percent_result = 3, x = 4, y = 5) |>
+  mutate(DEM_percent_result = as.numeric(gsub("%","", DEM_percent_result)))|>
+  mutate(REP_percent_result = as.numeric(gsub("%","", REP_percent_result)))|>
+  mutate(x = as.numeric(gsub("%","", x))) |>
+  mutate(y = as.numeric(gsub("%","", y))) |>
+  mutate(Other_percent_result = x+y) |>
+  select(1,2,3,6)
+representative_election_result3 <- representative_election_result3 |>
+  slice(-5) |>
+  select(1, 8) |>
+  pivot_longer(cols = -Name, names_to = "Party", values_to = "values") |>
+  pivot_wider(names_from = Name, values_from = values) |>
+  rename(DEM_percent_result = 2, REP_percent_result = 3, x = 4, y = 5) |>
+  mutate(DEM_percent_result = as.numeric(gsub("%","", DEM_percent_result)))|>
+  mutate(REP_percent_result = as.numeric(gsub("%","", REP_percent_result)))|>
+  mutate(x = as.numeric(gsub("%","", x))) |>
+  mutate(y = as.numeric(gsub("%","", y))) |>
+  mutate(Other_percent_result = x+y) |>
+  select(1,2,3,6)
+representative_election_result4 <- representative_election_result4 |>
+  slice(-4) |>
+  select(1, 8) |>
+  pivot_longer(cols = -Name, names_to = "Party", values_to = "values") |>
+  pivot_wider(names_from = Name, values_from = values) |>
+  rename(DEM_percent_result = 2, REP_percent_result = 3, Other_percent_result = 4) |>
+  mutate(DEM_percent_result = as.numeric(gsub("%","", DEM_percent_result)))|>
+  mutate(REP_percent_result = as.numeric(gsub("%","", REP_percent_result)))|>
+  mutate(Other_percent_result = as.numeric(gsub("%","", Other_percent_result)))
+representative_election_result5 <- representative_election_result5 |>
+  slice(-4) |>
+  select(1, 8) |>
+  pivot_longer(cols = -Name, names_to = "Party", values_to = "values") |>
+  pivot_wider(names_from = Name, values_from = values) |>
+  rename(DEM_percent_result = 2, REP_percent_result = 3, Other_percent_result = 4) |>
+  mutate(DEM_percent_result = as.numeric(gsub("%","", DEM_percent_result)))|>
+  mutate(REP_percent_result = as.numeric(gsub("%","", REP_percent_result)))|>
+  mutate(Other_percent_result = as.numeric(gsub("%","", Other_percent_result)))
+representative_election_result6 <- representative_election_result6 |>
+  slice(-4) |>
+  select(1, 8) |>
+  pivot_longer(cols = -Name, names_to = "Party", values_to = "values") |>
+  pivot_wider(names_from = Name, values_from = values) |>
+  rename(DEM_percent_result = 2, REP_percent_result = 3, Other_percent_result = 4) |>
+  mutate(DEM_percent_result = as.numeric(gsub("%","", DEM_percent_result)))|>
+  mutate(REP_percent_result = as.numeric(gsub("%","", REP_percent_result)))|>
+  mutate(Other_percent_result = as.numeric(gsub("%","", Other_percent_result)))
+representative_election_result7 <- representative_election_result7 |>
+  slice(-5) |>
+  select(1, 8) |>
+  pivot_longer(cols = -Name, names_to = "Party", values_to = "values") |>
+  pivot_wider(names_from = Name, values_from = values) |>
+  rename(DEM_percent_result = 2, REP_percent_result = 3, x = 4, y = 5) |>
+  mutate(DEM_percent_result = as.numeric(gsub("%","", DEM_percent_result)))|>
+  mutate(REP_percent_result = as.numeric(gsub("%","", REP_percent_result)))|>
+  mutate(x = as.numeric(gsub("%","", x))) |>
+  mutate(y = as.numeric(gsub("%","", y))) |>
+  mutate(Other_percent_result = x+y) |>
+  select(1,2,3,6)
+representative_election_result8 <- representative_election_result8 |>
+  slice(-5) |>
+  select(1, 8) |>
+  pivot_longer(cols = -Name, names_to = "Party", values_to = "values") |>
+  pivot_wider(names_from = Name, values_from = values) |>
+  rename(DEM_percent_result = 2, REP_percent_result = 3, x = 4, y = 5) |>
+  mutate(DEM_percent_result = as.numeric(gsub("%","", DEM_percent_result)))|>
+  mutate(REP_percent_result = as.numeric(gsub("%","", REP_percent_result)))|>
+  mutate(x = as.numeric(gsub("%","", x))) |>
+  mutate(y = as.numeric(gsub("%","", y))) |>
+  mutate(Other_percent_result = x+y) |>
+  select(1,2,3,6)
+representative_election_result <- bind_rows(list(representative_election_result1, representative_election_result2, representative_election_result3, representative_election_result4, representative_election_result5, representative_election_result6, representative_election_result7, representative_election_result8)) |>
+  select(2,3,4)
+#Merge with the registration
+congress_general_regis_result <- bind_cols(pattern_congress_general_24, representative_election_result) |>
+  select(-2,-3,-4,-5,-6)
+```
+
+Q3. At the *Legislative Districts level*
+3.1 How many voters registered for each party in the 2024 primary and general election?
+*A: For the 2024 Primary, there are 2,202,830 registrations for Democrats, 994,388 registrations for Republicans, 451,465 registrations for Unaffiliated, and 31,418 registrations for other parties. For 2024 General, there are 2,211,316 registrations for Democrats, 1,007,384 registrations for Republicans, 907,638 registrations for Unaffiliated, and 78,234 registrations for other parties.*
+3.1.1 How have these numbers changed compared to those in previous elections?
+*A: For the 2024 and 2020 Primary, the registration for Democrats increased by 1.33%, Republicans decreased by 1.34%, Unaffiliated decreased by 36.23%, and other parties decreased by 50.72%. For 2024 and 2020 General, the registration for Democrats decreased by 2.23%, Republicans decreased by 0.83%, Unaffiliated increased by 18.37%, and other parties increased by 21.68%.*
+3.2 Are there any patterns for voter registration from every district?
+*A: For both Primary and General 2024, there were 49 of 71 Districts where there were registrations for Democrats more than Republicans, and there were 53 of 71 Districts where there were registrations for Republicans more than Unaffiliated.*
+3.2.1 Are there any districts that don't fall into this pattern?
+*A: There were 22 Districts where registrations for Democrats were less than Republicans, and  18 Districts where registrations for Republicans were less than Unaffiliated.* 
+3.2.2 How are those districts different from others in terms of location, demography, economy, etc.?
+*A: Most of the Districts where registrations for Democrats less than Republicans, such as, 01A, 42C, 35A, 35B, 01C, 01B, or 05 all are located at the northern border of Maryland. Most of the Districts where registrations for Republicans less than Unaffiliated, such as, 39, 17, 20, 47B, 15, 22, or 47A all are located at the central part of Maryland in Montgomery and Prince George's County.   *
+3.3 Compared to the total population of each district, what is the proportion of voters who register for the election?
+*A: For both Primary and General 2024, in most districts, there were people registered to vote more than 50% of the population.*
+3.3.1 What are the differences between precincts having large and small proportions of voter registration?
+*A: 47A and 47B located in Prince George's were the only two districts that had people registered to vote less than 50% of the population for both Primary and General 2024.* 
+3.4 Compared to the election result, does the registration pattern match with the result?
+*In most districts, the election results had the same pattern as registrations.*
+
+```{r}
+#Prep dataframe for Q3 focusing on legislative district level
+
+#Registration Data
+legis_primary_24 <- read_csv("data/legis_level/legis_primary_24.csv")
+legis_general_24 <- read_csv("data/legis_level/legis_general_24.csv")
+legis_primary_20 <- read_csv("data/legis_level/legis_primary_20.csv")
+legis_general_20 <- read_csv("data/legis_level/legis_general_20.csv")
+
+#Population Data
+legis_population <- get_acs(geography="state legislative district (lower chamber)", 
+                       variables = "B01003_001", state = "MD", 
+                       year=2022)
+
+#Presidential Election Result 
+#Download Precinct Result and Code
+precint_result <- read_csv("data/legis_level/result/result.csv")
+legis_code <- read_csv("data/legis_level/result/code.csv")
+#Prep result dataframe
+precint_result <- precint_result |>
+  filter(Contest == "President and Vice President of the United States")
+precint_result <- precint_result |>
+  select(2,4,6,7) |>
+  clean_names() |>
+  mutate(precinct_name = as.numeric(gsub("-","", precinct_name)))
+#Prep code dataframe
+legis_code <- legis_code |>
+  select(3,4,10) |>
+  filter(!is.na(ED_PRECINCT)) |>
+  filter(!is.na(LEGISLATIVE_SUB_DISTRICT_CODE))
+#Join result dataframe with code dataframe to generate legislative district results 
+legis_result_draft <- precint_result |> 
+  left_join(legis_code, join_by(jurisdiction==COUNTY_NAME, precinct_name==ED_PRECINCT)) |>
+  filter(!is.na(LEGISLATIVE_SUB_DISTRICT_CODE)) |>
+  group_by(LEGISLATIVE_SUB_DISTRICT_CODE, party) |>
+  summarise(
+    total_votes = sum(total_votes))
+#Reshape dataframe
+legis_result_DEM <- legis_result_draft |>
+  filter(party == "DEM") |>
+  select(1,3) |>
+  rename(DEM_result = 2)
+legis_result_GRN <- legis_result_draft |>
+  filter(party == "GRN") |>
+  select(3) |>
+  rename(GRN_result = 2) 
+legis_result_LIB <- legis_result_draft |>
+  filter(party == "LIB") |>
+  select(3) |>
+  rename(LIB_result = 2)
+legis_result_NON <- legis_result_draft |>
+  filter(party == "NON") |>
+  select(3) |>
+  rename(NON_result = 2)
+legis_result_REP <- legis_result_draft |>
+  filter(party == "REP") |>
+  select(3) |>
+  rename(REP_result = 2)
+legis_result_UNF <- legis_result_draft |>
+  filter(party == "UNF") |>
+  select(3) |>
+  rename(UNF_result = 2)
+legis_result <- bind_cols(legis_result_DEM, legis_result_GRN, legis_result_LIB, legis_result_NON, legis_result_REP, legis_result_UNF) |>
+  select(-3,-5,-7,-9,-11) |>
+  rename(legislative_district_code = 1)
+
+```
+```{r}
+#Primary
+#2024
+legis_primary_24_count <- legis_primary_24 |>
+  mutate(
+    LIB = replace_na(LIB, 0),
+    OTH = replace_na(OTH, 0),
+    UNA = replace_na(UNA, 0)
+  ) |>
+  summarise(
+    DEM = sum(DEM),
+    REP = sum(REP),
+    LIB = sum(LIB),
+    OTH = sum(OTH),
+    UNA = sum(UNA),
+    NLM = sum(NLM)
+  ) |>
+  mutate(Other = LIB+OTH+NLM) |>
+  select(DEM, REP, UNA, Other) |>
+  rename(DEM24 = 1, REP24 =2, UNA24 = 3, Other24 = 4)
+#2020
+legis_primary_20_count <- legis_primary_20 |>
+  slice(68) |>
+  select(-1,-2) |>
+  mutate(Other = LIB+GRN+OTH) |>
+  select(DEM, REP, UNA, Other) |>
+  rename(DEM20 = 1, REP20 =2, UNA20 = 3, Other20 = 4)
+#Find the change
+compare_legis_primary_24_20 <- bind_cols(legis_primary_24_count, legis_primary_20_count) |>
+  mutate(DEM_change = ((DEM24-DEM20)/DEM20)*100) |>
+  mutate(REP_change = ((REP24-REP20)/REP20)*100) |>
+  mutate(UNA_change = ((UNA24-UNA20)/UNA20)*100) |>
+  mutate(Other_change = ((Other24-Other20)/Other20)*100)
+
+#General
+#2024
+legis_general_24_count <- legis_general_24 |>
+  summarise(
+    DEM = sum(DEM),
+    REP = sum(REP),
+    LIB = sum(LIB),
+    OTH = sum(OTH),
+    UNA = sum(UNA),
+    NLM = sum(NLM),
+    GRN = sum(GRN)
+  ) |>
+  mutate(Other = LIB+OTH+NLM+GRN) |>
+  select(DEM, REP, UNA, Other) |>
+  rename(DEM24 = 1, REP24 =2, UNA24 = 3, Other24 = 4)
+#2020
+legis_general_20_count <- legis_general_20 |>
+  summarise(
+    DEM = sum(DEM),
+    REP = sum(REP),
+    BAR = sum(BAR),
+    GRN = sum(GRN),
+    LIB = sum(LIB),
+    WCP = sum(WCP),
+    OTH = sum(OTH),
+    UNA = sum(UNA)
+  ) |>
+  mutate(Other = BAR+GRN+LIB+WCP+OTH) |>
+  select(DEM, REP, UNA, Other) |>
+  rename(DEM20 = 1, REP20 =2, UNA20 = 3, Other20 = 4)
+#Find the change
+compare_legis_general_24_20 <- bind_cols(legis_general_24_count, legis_general_20_count) |>
+  mutate(DEM_change = ((DEM24-DEM20)/DEM20)*100) |>
+  mutate(REP_change = ((REP24-REP20)/REP20)*100) |>
+  mutate(UNA_change = ((UNA24-UNA20)/UNA20)*100) |>
+  mutate(Other_change = ((Other24-Other20)/Other20)*100)
+
+#Find Pattern
+#Primary24
+pattern_legis_primary_24 <- legis_primary_24 |>
+  mutate(
+    LIB = replace_na(LIB, 0),
+    OTH = replace_na(OTH, 0),
+    UNA = replace_na(UNA, 0)
+  ) |>
+  mutate(Other = LIB+OTH+NLM) |>
+  select(District, DEM, REP, UNA, Other, Total) |>
+  mutate(DEM_per = (DEM/Total)*100) |>
+  mutate(REP_per = (REP/Total)*100) |>
+  mutate(UNA_per = (UNA/Total)*100) |>
+  mutate(Other_per = (Other/Total)*100) |>
+  mutate(DEM_REP = DEM_per-REP_per) |>
+  mutate(REP_UNA = REP_per-UNA_per) |>
+  mutate(DEM_UNA = DEM_per-UNA_per)
+#General24
+pattern_legis_general_24 <- legis_general_24 |>
+  mutate(Other = LIB+OTH+NLM+GRN) |>
+  select(District, DEM, REP, UNA, Other, Total) |>
+  mutate(DEM_per = (DEM/Total)*100) |>
+  mutate(REP_per = (REP/Total)*100) |>
+  mutate(UNA_per = (UNA/Total)*100) |>
+  mutate(Other_per = (Other/Total)*100) |>
+  mutate(DEM_REP = DEM_per-REP_per) |>
+  mutate(REP_UNA = REP_per-UNA_per) |>
+  mutate(DEM_UNA = DEM_per-UNA_per)
+
+#Compare to Population
+#Primary24
+total_legis_primary_24 <- legis_primary_24 |>
+  select(District, Total) |>
+  mutate(District = gsub("Legislative District Code ", "", District)) |>
+  mutate(District = str_trim(District,side="both")) |>
+  mutate(District = sub("^0+", "", District))
+cleaned_legis_population <- legis_population |>
+  rename(District = 2, population = 4) |>
+  select(2,4) |>
+  mutate(District = gsub("State Legislative District ", "", District)) |>
+  mutate(District = gsub("State Legislative Subdistrict ", "", District)) |>
+  separate(District, c("District", "x", "y"), sep=' ') |>
+  select(1,4) |>
+  mutate(District = str_trim(District,side="both"))
+regis_population_legis_primary_24 <- total_legis_primary_24 |>
+  left_join(cleaned_legis_population, join_by(District)) |>
+  mutate(Percent = (Total/population)*100)
+#General24
+total_legis_general_24 <- legis_general_24 |>
+  select(District, Total) |>
+  mutate(District = gsub("Legislative District Code ", "", District)) |>
+  mutate(District = str_trim(District,side="both")) |>
+  mutate(District = sub("^0+", "", District))
+regis_population_legis_general_24 <- total_legis_general_24 |>
+  left_join(cleaned_legis_population, join_by(District)) |>
+  mutate(Percent = (Total/population)*100)
+
+#Compare to the result
+#Clean the result
+legis_result_cleaned <- legis_result |>
+  rename(District = 1, UNA_result = 7) |>
+  mutate(Other_result = GRN_result+LIB_result+NON_result) |>
+  select(District,DEM_result,REP_result,UNA_result,Other_result) |>
+  mutate(Total_result = DEM_result + REP_result + UNA_result + Other_result) |>
+  mutate(DEM_result_per = (DEM_result/Total_result)*100) |>
+  mutate(REP_result_per = (REP_result/Total_result)*100) |>
+  mutate(UNA_result_per = (UNA_result/Total_result)*100) |>
+  mutate(Other_result_per = (Other_result/Total_result)*100) |>
+  mutate(DEM_REP_result = DEM_result_per-REP_result_per) |>
+  mutate(REP_UNA_result = REP_result_per-UNA_result_per) |>
+  mutate(DEM_UNA_result = DEM_result_per-UNA_result_per)
+```
+
+Q4. At the *Precinct level*
+4.1 How many voters registered for each party in the 2024 primary and general election?
+*A: Cannot answer as we don't have registration data for precinct level.*
+4.1.1 How have these numbers changed compared to those in previous elections?
+*A: Cannot answer as we don't have registration data for precinct level.*
+4.2 Are there any patterns for voter registration from every precinct?
+*A: Cannot answer as we don't have registration data for precinct level.*
+4.2.1 Are there any precincts that don't fall into this pattern?
+*A: Cannot answer as we don't have registration data for precinct level.*
+4.2.2 How are those precincts different from others in terms of location, demography, economy, etc.?
+*A: Cannot answer as we don't have registration data for precinct level.*
+4.3 Compared to the total population of each precinct, what is the proportion of voters who register for the election?
+*A: Cannot answer as we don't have registration data and population data for precinct level.*
+4.3.1 What are the differences between precincts having large and small proportions of voter registration?
+*A: Cannot answer as we don't have registration data and population data for precinct level.*
+4.4 Compared to the presidential election result, does the registration pattern match with the result?
+*A: We cannot compare the registration data with the result, but we can indicate some interesting findings about the election results pattern, for instance, in Allegany County where Republican won in most areas (29 precincts), there is 1 precinct that Democrat won; on the contrary, in Montgomery County, where Democrat won in most areas (255 precincts), there is 2 precincts that Republican won.*    
+
+```{r}
+#Prep dataframe for Q4 focusing on legislative precinct level
+
+#Presidential Result Data
+precinct_result <- read_csv("data/precinct/precinct result.csv")
+precinct_result_DEM <- precinct_result |>
+  select(1, 2, 3, 4, 6, 7) |>
+  filter(Contest == "President and Vice President of the United States") |>
+  select(-1) |>
+  filter(Party == "DEM") |>
+  rename(total_votes_DEM = 5) |>
+  select(-4)
+precinct_result_REP <- precinct_result |>
+  select(1, 2, 3, 4, 6, 7) |>
+  filter(Contest == "President and Vice President of the United States") |>
+  select(-1) |>
+  filter(Party == "REP") |>
+  rename(total_votes_REP = 5) |>
+  select(-1,-2,-3,-4)
+precinct_result_LIB <- precinct_result |>
+  select(1, 2, 3, 4, 6, 7) |>
+  filter(Contest == "President and Vice President of the United States") |>
+  select(-1) |>
+  filter(Party == "LIB") |>
+  rename(total_votes_LIB = 5) |>
+  select(-1,-2,-3,-4)
+precinct_result_GRN <- precinct_result |>
+  select(1, 2, 3, 4, 6, 7) |>
+  filter(Contest == "President and Vice President of the United States") |>
+  select(-1) |>
+  filter(Party == "GRN") |>
+  rename(total_votes_GRN = 5) |>
+  select(-1,-2,-3,-4)
+precinct_result_UNF <- precinct_result |>
+  select(1, 2, 3, 4, 6, 7) |>
+  filter(Contest == "President and Vice President of the United States") |>
+  select(-1) |>
+  filter(Party == "UNF") |>
+  rename(total_votes_UNF = 5) |>
+  select(-1,-2,-3,-4)
+precinct_result_NON <- precinct_result |>
+  select(1, 2, 3, 4, 6, 7) |>
+  filter(Contest == "President and Vice President of the United States") |>
+  select(-1) |>
+  filter(Party == "NON") |>
+  rename(total_votes_NON = 5) |>
+  select(-1,-2,-3,-4)
+precinct_result_cleaned <- bind_cols(precinct_result_DEM, precinct_result_REP, precinct_result_LIB, precinct_result_GRN, precinct_result_UNF, precinct_result_NON)
+precinct_result_final <- precinct_result_cleaned |>
+  mutate(total_votes = total_votes_DEM + total_votes_REP + total_votes_LIB + total_votes_GRN + total_votes_UNF + total_votes_NON)
+```
+```{r}
+#Find the pattern for the results
+precinct_result_pattern <- precinct_result_final |>
+  mutate(total_votes_others = total_votes_LIB + total_votes_GRN + total_votes_NON) |>
+  select(1,2,3,4,5,11,8,10,) |>
+  filter(total_votes != 0) |>
+  mutate(DEM_percent = (total_votes_DEM/total_votes)*100) |>
+  mutate(REP_percent = (total_votes_REP/total_votes)*100) |>
+  mutate(others_percent = (total_votes_others/total_votes)*100) |>
+  mutate(UNF_percent = (total_votes_UNF/total_votes)*100) |>
+  mutate(DEM_REP = DEM_percent - REP_percent) |>
+  select(1,2,3,13) |>
+  filter(DEM_REP != 0)
+
+#Check each county
+precinct_result_pattern_compare <- precinct_result_pattern |>
+  mutate(
+    D = case_when(
+      DEM_REP > 0 ~ 1,
+      DEM_REP < 0 ~ 0
+      ),
+    R = case_when(
+      DEM_REP > 0 ~ 0,
+      DEM_REP < 0 ~ 1
+      )
+  ) |>
+  group_by(Jurisdiction)|>
+  summarise(
+    county_count = n(),
+    More_DEM = sum(D),
+    More_REP = sum(R)
+  ) |>
+  mutate(More_DEM_percent = (More_DEM/county_count)*100) |>
+  mutate(More_REP_percent = (More_REP/county_count)*100)
+```
+
+Q5. At the *County level*
+5.1 How many voters registered for each party in the 2024 primary and general election?
+*A: For the 2024 Primary, there are 2,202,830 registrations for Democrats, 994,388 registrations for Republicans, 451,465 registrations for Unaffiliated, and 31,418 registrations for other parties. For 2024 General, there are 2,211,316 registrations for Democrats, 1,007,384 registrations for Republicans, 907,638 registrations for Unaffiliated, and 78,234 registrations for other parties.*
+5.1.1 How have these numbers changed compared to those in previous elections?
+*A: For the 2024 and 2020 Primary, the registration for Democrats decreased by 1.24%, Republicans decreased by 1.45%, Unaffiliated increased by 40.24%, and other parties increased by 44.96%. For 2024 and 2020 General, the registration for Democrats decreased by 2.26%, Republicans decreased by 0.83%, Unaffiliated increased by 18.37%, and other parties increased by 21.53%.*
+5.2 Are there any patterns for voter registration from every county?
+*For both Primary and General in 2024, from 24 counties, almost half of them had people who registered for Democrats more than those for Republicans while the other half were the opposite. And in most counties, there were registrations for Republicans more than those for Unaffiliated.*  
+5.2.1 Are there any counties that don't fall into this pattern? 
+*5 counties had people who registered for Unaffiliated more than those for Republicans.*
+5.2.2 How are those counties different from others in terms of location, demography, economy, etc.?
+*Most of them which are Montgomery, Prince George's, Charles, and Howard are located in the center part of Maryland.*
+5.3 Compared to the total population of each county, what is the proportion of voters who register for the election?
+*Every county had people registering to vote more than 50% of the population.*
+5.3.1 What are the differences between counties having large and small proportions of voter registration?
+*There are no significant differences.* 
+5.4 Compared to the 2024 presidential election result, does the registration pattern match with the result?
+*In most counties, the election results had the same pattern as registrations.*
+
+```{r}
+#Prep dataframe for Q5 focusing on county level
+
+#Registration Data
+county_primary_24 <- read_csv("data/county/county_primary_24.csv")
+county_general_24 <- read_csv("data/county/county_general_24.csv")
+county_primary_20 <- read_csv("data/county/county_primary_20.csv")
+county_primary_20 <- county_primary_20 |>
+  rename(County = 1)
+county_general_20 <- read_csv("data/county/county_general_20.csv")
+
+#Population Data
+county_population <- get_acs(geography="county", 
+                       variables = "B01003_001", 
+                       state = "MD", year=2022)
+
+#Presidential Election Result (county level)
+pres_election_result_county_url <- "https://elections.maryland.gov/elections/2024/general_Results/gen_detail_results_2024_1_1.html"
+pres_election_result_county_html <- pres_election_result_county_url |>
+  read_html() |>
+  html_table()
+pres_election_result_county1 <- pres_election_result_county_html[[1]]
+pres_election_result_county2 <- pres_election_result_county_html[[2]]
+pres_election_result_county2 <- pres_election_result_county2|>
+  select(-1)
+pres_election_result_county3 <- pres_election_result_county_html[[3]]
+pres_election_result_county3 <- pres_election_result_county3|>
+  select(-1)
+pres_election_result_county4 <- pres_election_result_county_html[[4]]
+pres_election_result_county4 <- pres_election_result_county4|>
+  select(-1)
+pres_election_result_county5 <- pres_election_result_county_html[[5]]
+pres_election_result_county5 <- pres_election_result_county5|>
+  select(-1)
+pres_election_result_county6 <- pres_election_result_county_html[[6]]
+pres_election_result_county6 <- pres_election_result_county6|>
+  select(-1)
+pres_election_result_county <- bind_cols(pres_election_result_county1, pres_election_result_county2, pres_election_result_county3, pres_election_result_county4, pres_election_result_county5, pres_election_result_county6)
+```
+```{r}
+#Primary
+#2024
+county_primary_24_count <- county_primary_24 |>
+  summarise(
+    DEM = sum(DEM),
+    REP = sum(REP),
+    LIB = sum(LIB),
+    OTH = sum(OTH),
+    UNA = sum(UNA),
+    NLM = sum(NLM)
+  ) |>
+  mutate(Other = LIB+OTH+NLM) |>
+  select(DEM, REP, UNA, Other) |>
+  rename(DEM24 = 1, REP24 =2, UNA24 = 3, Other24 = 4)
+#2020
+county_primary_20_count <- county_primary_20 |>
+  summarise(
+    BAR = sum(BAR),
+    DEM = sum(DEM),
+    OTH = sum(OTH),
+    REP = sum(REP),
+    UNA = sum(UNA),
+    WCP = sum(WCP)
+  ) |>mutate(Other = BAR+OTH+WCP) |>
+  select(DEM, REP, UNA, Other) |>
+  rename(DEM20 = 1, REP20 =2, UNA20 = 3, Other20 = 4)
+#Find the change
+compare_county_primary_24_20 <- bind_cols(county_primary_24_count, county_primary_20_count) |>
+  mutate(DEM_change = ((DEM24-DEM20)/DEM20)*100) |>
+  mutate(REP_change = ((REP24-REP20)/REP20)*100) |>
+  mutate(UNA_change = ((UNA24-UNA20)/UNA20)*100) |>
+  mutate(Other_change = ((Other24-Other20)/Other20)*100)
+
+#General
+#2024
+county_general_24_count <- county_general_24 |>
+  summarise(
+    DEM = sum(DEM),
+    REP = sum(REP),
+    LIB = sum(LIB),
+    OTH = sum(OTH),
+    UNA = sum(UNA),
+    NLM = sum(NLM),
+    GRN = sum(GRN)
+  ) |>
+  mutate(Other = LIB+OTH+NLM+GRN) |>
+  select(DEM, REP, UNA, Other) |>
+  rename(DEM24 = 1, REP24 =2, UNA24 = 3, Other24 = 4)
+#2020
+county_general_20_count <- county_general_20 |>
+  summarise(
+    DEM = sum(DEM),
+    REP = sum(REP),
+    BAR = sum(BAR),
+    GRN = sum(GRN),
+    LIB = sum(LIB),
+    WCP = sum(WCP),
+    OTH = sum(OTH),
+    UNA = sum(UNA)
+  ) |>
+  mutate(Other = BAR+GRN+LIB+WCP+OTH) |>
+  select(DEM, REP, UNA, Other) |>
+  rename(DEM20 = 1, REP20 =2, UNA20 = 3, Other20 = 4)
+#Find the change
+compare_county_general_24_20 <- bind_cols(county_general_24_count, county_general_20_count) |>
+  mutate(DEM_change = ((DEM24-DEM20)/DEM20)*100) |>
+  mutate(REP_change = ((REP24-REP20)/REP20)*100) |>
+  mutate(UNA_change = ((UNA24-UNA20)/UNA20)*100) |>
+  mutate(Other_change = ((Other24-Other20)/Other20)*100)
+
+#Find Pattern
+#Primary24
+pattern_county_primary_24 <- county_primary_24 |>
+  mutate(Other = LIB+OTH+NLM) |>
+  select(County, DEM, REP, UNA, Other, TOTAL) |>
+  mutate(DEM_per = (DEM/TOTAL)*100) |>
+  mutate(REP_per = (REP/TOTAL)*100) |>
+  mutate(UNA_per = (UNA/TOTAL)*100) |>
+  mutate(Other_per = (Other/TOTAL)*100) |>
+  mutate(DEM_REP = DEM_per-REP_per) |>
+  mutate(REP_UNA = REP_per-UNA_per) |>
+  mutate(DEM_UNA = DEM_per-UNA_per)
+#General24
+pattern_county_general_24 <- county_general_24 |>
+  mutate(Other = LIB+OTH+NLM+GRN) |>
+  select(County, DEM, REP, UNA, Other, TOTAL) |>
+  mutate(DEM_per = (DEM/TOTAL)*100) |>
+  mutate(REP_per = (REP/TOTAL)*100) |>
+  mutate(UNA_per = (UNA/TOTAL)*100) |>
+  mutate(Other_per = (Other/TOTAL)*100) |>
+  mutate(DEM_REP = DEM_per-REP_per) |>
+  mutate(REP_UNA = REP_per-UNA_per) |>
+  mutate(DEM_UNA = DEM_per-UNA_per)
+
+#Compare to Population
+#Primary24
+total_county_primary_24 <- county_primary_24 |>
+  select(County, TOTAL) |>
+  mutate(County = str_trim(County,side="both"))
+cleaned_county_population <- county_population |>
+  rename(County = 2, population = 4) |>
+  select(2,4) |>
+  mutate(County = gsub(" County, Maryland", "", County)) |>
+  mutate(County = gsub("Baltimore", "Baltimore County", County)) |>
+  mutate(County = gsub("Baltimore County city, Maryland", "Baltimore City", County)) |>
+  mutate(County = gsub("St. Mary's", "Saint Mary's", County)) |>
+  mutate(County = str_trim(County,side="both"))
+regis_population_county_primary_24 <- total_county_primary_24 |>
+  left_join(cleaned_county_population, join_by(County)) |>
+  mutate(Percent = (TOTAL/population)*100)
+#General24
+total_county_general_24 <- county_general_24 |>
+  select(County, TOTAL) |>
+  mutate(County = str_trim(County,side="both"))
+regis_population_county_general_24 <- total_county_general_24 |>
+  left_join(cleaned_county_population, join_by(County)) |>
+  mutate(Percent = (TOTAL/population)*100)
+
+#Compare to the result
+#Clean the result
+county_result_cleaned <- pres_election_result_county |>
+  rename(County = 1, DEM1 = 2, REP1 = 3, LIB = 4, GRN = 5, UNA1 = 6, DEM2 = 7, DEM3 = 8, REP2 = 9, REP3 = 10, OTH1 = 11, OTH2 = 12, OTH3 = 13, OTH4 = 14, OTH5 = 15, OTH6 = 16, UNA2 = 17, UNA3 = 18, UNA4 = 19, UNA5 = 20, UNA6 = 21, UNA7 = 22, UNA8 = 23, UNA9 = 24, UNA10 = 25, UNA11 = 26, UNA12 = 27, UNA13 = 28, UNA14 = 29, UNA15 = 30, UNA16 = 31, UNA17 = 32, UNA18 = 33, UNA19 = 34, OTH7 = 35) |>
+  mutate(DEM1 = as.numeric(gsub(",","", DEM1))) |>
+  mutate(REP1 = as.numeric(gsub(",","", REP1))) |>
+  mutate(LIB = as.numeric(gsub(",","", LIB))) |>
+  mutate(GRN = as.numeric(gsub(",","", GRN))) |>
+  mutate(UNA1 = as.numeric(gsub(",","", UNA1))) |>
+  mutate(DEM2 = as.numeric(gsub(",","", DEM2))) |>
+  mutate(DEM3 = as.numeric(gsub(",","", DEM3))) |>
+  mutate(REP2 = as.numeric(gsub(",","", REP2))) |>
+  mutate(REP3 = as.numeric(gsub(",","", REP3))) |>
+  mutate(OTH1 = as.numeric(gsub(",","", OTH1))) |>
+  mutate(OTH2 = as.numeric(gsub(",","", OTH2))) |>
+  mutate(OTH3 = as.numeric(gsub(",","", OTH3))) |>
+  mutate(OTH4 = as.numeric(gsub(",","", OTH4))) |>
+  mutate(OTH5 = as.numeric(gsub(",","", OTH5))) |>
+  mutate(OTH6 = as.numeric(gsub(",","", OTH6))) |>
+  mutate(UNA2 = as.numeric(gsub(",","", UNA2))) |>
+  mutate(UNA3 = as.numeric(gsub(",","", UNA3))) |>
+  mutate(UNA4 = as.numeric(gsub(",","", UNA4))) |>
+  mutate(UNA5 = as.numeric(gsub(",","", UNA5))) |>
+  mutate(UNA6 = as.numeric(gsub(",","", UNA6))) |>
+  mutate(UNA7 = as.numeric(gsub(",","", UNA7))) |>
+  mutate(UNA8 = as.numeric(gsub(",","", UNA8))) |>
+  mutate(UNA9 = as.numeric(gsub(",","", UNA9))) |>
+  mutate(UNA10 = as.numeric(gsub(",","", UNA10))) |>
+  mutate(UNA11 = as.numeric(gsub(",","", UNA11))) |>
+  mutate(UNA12 = as.numeric(gsub(",","", UNA12))) |>
+  mutate(UNA13 = as.numeric(gsub(",","", UNA13))) |>
+  mutate(UNA14 = as.numeric(gsub(",","", UNA14))) |>
+  mutate(UNA15 = as.numeric(gsub(",","", UNA15))) |>
+  mutate(UNA16 = as.numeric(gsub(",","", UNA16))) |>
+  mutate(UNA17 = as.numeric(gsub(",","", UNA17))) |>
+  mutate(UNA18 = as.numeric(gsub(",","", UNA18))) |>
+  mutate(UNA19 = as.numeric(gsub(",","", UNA19))) |>
+  mutate(OTH7 = as.numeric(gsub(",","", OTH7))) |>
+  slice(-25) |>
+  mutate(DEM = DEM1 + DEM2 + DEM3) |>
+  mutate(REP = REP1 + REP2 + REP3) |>
+  mutate(UNA = UNA1 + UNA2 + UNA3 + UNA4 + UNA5 + UNA6 + UNA7 + UNA8 + UNA9 + UNA10 + UNA11 + UNA12 + UNA13 + UNA14 + UNA15 + UNA16 + UNA17 + UNA18 + UNA19) |>
+  mutate(OTH = OTH1 + OTH2 + OTH3 + OTH4 + OTH5 + OTH6 + OTH7 + LIB + GRN) |>
+  select(County, DEM, REP, UNA, OTH) |>
+  mutate(Total = DEM+REP+UNA+OTH) |>
+  mutate(DEM_per = (DEM/Total)*100) |>
+  mutate(REP_per = (REP/Total)*100) |>
+  mutate(UNA_per = (UNA/Total)*100) |>
+  mutate(OTH_per = (OTH/Total)*100) |>
+  mutate(DEM_REP = DEM_per-REP_per) |>
+  mutate(REP_UNA = REP_per-UNA_per) |>
+  mutate(DEM_UNA = DEM_per-UNA_per)
+```
+
+- Has narrative for your code that explains each of your questions, your findings so far and what you do and don't know as a result of them.
+
+*Q1 At the 2024 general election party registration level, several comparisons reveal key voter trends. Comparing registration data from the general election to the primary highlights shifts in  party dynamics, while analyzing changes since 2020 reveal broader trends over time. Relating registrations to the state’s population shows voter participation rates, and comparing registration data to presidential election results provides insights into turnout and party loyalty. Together, these analyses offer a comprehensive view of voter behavior and political engagement in Maryland.*
+
+*Q2 At the congressional district level, we can indicate primary and general voter registrations for each party and compare them to registration data from the previous election in 2020. We can find the pattern of voter registrations in most districts, compare them to the presidential election results pattern, and find the proportion of people who registered to vote compared to all populations in each district.*
+
+*Q3 Same as the congressional district level, at legislative district, we can indicate primary and general voter registrations for each party and compare them to registration data from the previous election in 2020. We can find the pattern of voter registrations in most districts, compare them to the presidential election results pattern, and find the proportion of people who registered to vote compared to all populations in each district.*
+
+*Q4 At the precinct level, we cannot work on questions asking about registrations and population due to the lack of data. However, we can find the pattern of presidential election results in each precinct.*
+
+*Q5 Similar to congressional and legislative level, at county level, we can indicate primary and general voter registrations for each party and compare them to registration data from the previous election in 2020. We can find the pattern of voter registrations in most counties, compare them to the presidential election results pattern, and find the proportion of people who registered to vote compared to all populations in each counties. * 
+
+
+- Identifies your most newsworthy finding so far and explain why it is.
+
+*Q1 Interestingly, while the comparison between 2024 registrations and those of the previous election reveals a significant rise in popularity for "other parties" and "unaffiliated" registrants, a different trend emerges in the context of the 2024 presidential election. The number of actual voters for most parties, including the unaffiliated group, dropped sharply. This suggests that while registrations for secondary parties and unaffiliated voters have grown, when faced with critical decisions in presidential elections, voters tend to gravitate back to the two dominant parties, Republican and Democratic. This pattern highlights a persistent reliance on the traditional bipartisan framework, even as alternative affiliations gain traction in registration data.*
+
+*Q2 At the congressional district level, the voter registration pattern in District 1 could be most newsworthy as it is the only district where people registered for Republican more than Democrats.*
+
+*Q3 At the legislative level, in most areas, there were registrations for Democrats more than Republicans except in 22 Districts most of which are located at the northern border of Maryland. This could be interesting and newsworthy.*
+
+*Q4 At the precinct level, in Allegany where Republicans had a big win, precinct ID 2600 could be newsworthy as it was the only area in which Democrats won; similarly, in Montgomery County where Democrats had a big win, precinct ID 107 and 1201 could be newsworthy as they were only two areas in which that Republicans won.*
+
+*Q5 We think the most newsworthy aspect of registration data at the county level is registrations for Republicans and Unaffiliated. Most counties had the same pattern reflecting that registrations for Republicans were more than those for Unaffiliated except in Montgomery, Prince George's, Charles, Frederick, and Howard.*
 
