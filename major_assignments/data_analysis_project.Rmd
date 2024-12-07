@@ -1215,22 +1215,8 @@ congress_general_regis_result <- bind_cols(pattern_congress_general_24, represen
 ```
 
 Q3. At the *Legislative Districts level*
-3.1 How many voters registered for each party in the 2024 primary and general election?
-*A: For the 2024 Primary, there are 2,202,830 registrations for Democrats, 994,388 registrations for Republicans, 451,465 registrations for Unaffiliated, and 31,418 registrations for other parties. For 2024 General, there are 2,211,316 registrations for Democrats, 1,007,384 registrations for Republicans, 907,638 registrations for Unaffiliated, and 78,234 registrations for other parties.*
-3.1.1 How have these numbers changed compared to those in previous elections?
-*A: For the 2024 and 2020 Primary, the registration for Democrats increased by 1.33%, Republicans decreased by 1.34%, Unaffiliated decreased by 36.23%, and other parties decreased by 50.72%. For 2024 and 2020 General, the registration for Democrats decreased by 2.23%, Republicans decreased by 0.83%, Unaffiliated increased by 18.37%, and other parties increased by 21.68%.*
-3.2 Are there any patterns for voter registration from every district?
-*A: For both Primary and General 2024, there were 49 of 71 Districts where there were registrations for Democrats more than Republicans, and there were 53 of 71 Districts where there were registrations for Republicans more than Unaffiliated.*
-3.2.1 Are there any districts that don't fall into this pattern?
-*A: There were 22 Districts where registrations for Democrats were less than Republicans, and  18 Districts where registrations for Republicans were less than Unaffiliated.* 
-3.2.2 How are those districts different from others in terms of location, demography, economy, etc.?
-*A: Most of the Districts where registrations for Democrats less than Republicans, such as, 01A, 42C, 35A, 35B, 01C, 01B, or 05 all are located at the northern border of Maryland. Most of the Districts where registrations for Republicans less than Unaffiliated, such as, 39, 17, 20, 47B, 15, 22, or 47A all are located at the central part of Maryland in Montgomery and Prince George's County.   *
-3.3 Compared to the total population of each district, what is the proportion of voters who register for the election?
-*A: For both Primary and General 2024, in most districts, there were people registered to vote more than 50% of the population.*
-3.3.1 What are the differences between precincts having large and small proportions of voter registration?
-*A: 47A and 47B located in Prince George's were the only two districts that had people registered to vote less than 50% of the population for both Primary and General 2024.* 
-3.4 Compared to the election result, does the registration pattern match with the result?
-*In most districts, the election results had the same pattern as registrations.*
+3.1: Which legislative districts had the closest margins between Democrat and Republican parties?
+3.2: Do unaffiliated voters constitute a decent portion of the election?
 
 ```{r}
 #Prep dataframe for Q3 focusing on legislative district level
@@ -1300,147 +1286,40 @@ legis_result <- bind_cols(legis_result_DEM, legis_result_GRN, legis_result_LIB, 
 
 ```
 ```{r}
-#Primary
-#2024
-legis_primary_24_count <- legis_primary_24 |>
+legis_result <- legis_result |>
+  mutate(dem_rep_difference = DEM_result - REP_result)|>
+  mutate(total_votes = DEM_result + GRN_result + LIB_result + NON_result + REP_result + UNF_result)|>
+  arrange(desc(dem_rep_difference))
+
+legis_result <- legis_result |>
   mutate(
-    LIB = replace_na(LIB, 0),
-    OTH = replace_na(OTH, 0),
-    UNA = replace_na(UNA, 0)
-  ) |>
-  summarise(
-    DEM = sum(DEM),
-    REP = sum(REP),
-    LIB = sum(LIB),
-    OTH = sum(OTH),
-    UNA = sum(UNA),
-    NLM = sum(NLM)
-  ) |>
-  mutate(Other = LIB+OTH+NLM) |>
-  select(DEM, REP, UNA, Other) |>
-  rename(DEM24 = 1, REP24 =2, UNA24 = 3, Other24 = 4)
-#2020
-legis_primary_20_count <- legis_primary_20 |>
-  slice(68) |>
-  select(-1,-2) |>
-  mutate(Other = LIB+GRN+OTH) |>
-  select(DEM, REP, UNA, Other) |>
-  rename(DEM20 = 1, REP20 =2, UNA20 = 3, Other20 = 4)
-#Find the change
-compare_legis_primary_24_20 <- bind_cols(legis_primary_24_count, legis_primary_20_count) |>
-  mutate(DEM_change = ((DEM24-DEM20)/DEM20)*100) |>
-  mutate(REP_change = ((REP24-REP20)/REP20)*100) |>
-  mutate(UNA_change = ((UNA24-UNA20)/UNA20)*100) |>
-  mutate(Other_change = ((Other24-Other20)/Other20)*100)
+    party_dominance = case_when(
+      dem_rep_difference > 0 ~ "Democrat Dominant",
+      dem_rep_difference < 0 ~ "Republican Dominant",
+      TRUE ~ "No Clear Winner" # In case of a tie or no votes
+    )
+  )
+dominance_counts <- legis_result |>
+  count(party_dominance)
+print(dominance_counts)
 
-#General
-#2024
-legis_general_24_count <- legis_general_24 |>
-  summarise(
-    DEM = sum(DEM),
-    REP = sum(REP),
-    LIB = sum(LIB),
-    OTH = sum(OTH),
-    UNA = sum(UNA),
-    NLM = sum(NLM),
-    GRN = sum(GRN)
-  ) |>
-  mutate(Other = LIB+OTH+NLM+GRN) |>
-  select(DEM, REP, UNA, Other) |>
-  rename(DEM24 = 1, REP24 =2, UNA24 = 3, Other24 = 4)
-#2020
-legis_general_20_count <- legis_general_20 |>
-  summarise(
-    DEM = sum(DEM),
-    REP = sum(REP),
-    BAR = sum(BAR),
-    GRN = sum(GRN),
-    LIB = sum(LIB),
-    WCP = sum(WCP),
-    OTH = sum(OTH),
-    UNA = sum(UNA)
-  ) |>
-  mutate(Other = BAR+GRN+LIB+WCP+OTH) |>
-  select(DEM, REP, UNA, Other) |>
-  rename(DEM20 = 1, REP20 =2, UNA20 = 3, Other20 = 4)
-#Find the change
-compare_legis_general_24_20 <- bind_cols(legis_general_24_count, legis_general_20_count) |>
-  mutate(DEM_change = ((DEM24-DEM20)/DEM20)*100) |>
-  mutate(REP_change = ((REP24-REP20)/REP20)*100) |>
-  mutate(UNA_change = ((UNA24-UNA20)/UNA20)*100) |>
-  mutate(Other_change = ((Other24-Other20)/Other20)*100)
+closest_races <- legis_result |>
+  select(legislative_district_code, DEM_result, REP_result) |>
+  mutate(margin = abs(DEM_result - REP_result)) |>
+  arrange(margin) |>
+  head(10) 
 
-#Find Pattern
-#Primary24
-pattern_legis_primary_24 <- legis_primary_24 |>
+legis_result <- legis_result |>
   mutate(
-    LIB = replace_na(LIB, 0),
-    OTH = replace_na(OTH, 0),
-    UNA = replace_na(UNA, 0)
-  ) |>
-  mutate(Other = LIB+OTH+NLM) |>
-  select(District, DEM, REP, UNA, Other, Total) |>
-  mutate(DEM_per = (DEM/Total)*100) |>
-  mutate(REP_per = (REP/Total)*100) |>
-  mutate(UNA_per = (UNA/Total)*100) |>
-  mutate(Other_per = (Other/Total)*100) |>
-  mutate(DEM_REP = DEM_per-REP_per) |>
-  mutate(REP_UNA = REP_per-UNA_per) |>
-  mutate(DEM_UNA = DEM_per-UNA_per)
-#General24
-pattern_legis_general_24 <- legis_general_24 |>
-  mutate(Other = LIB+OTH+NLM+GRN) |>
-  select(District, DEM, REP, UNA, Other, Total) |>
-  mutate(DEM_per = (DEM/Total)*100) |>
-  mutate(REP_per = (REP/Total)*100) |>
-  mutate(UNA_per = (UNA/Total)*100) |>
-  mutate(Other_per = (Other/Total)*100) |>
-  mutate(DEM_REP = DEM_per-REP_per) |>
-  mutate(REP_UNA = REP_per-UNA_per) |>
-  mutate(DEM_UNA = DEM_per-UNA_per)
+    unf_percentage = (UNF_result / total_votes) * 100 
+  )
 
-#Compare to Population
-#Primary24
-total_legis_primary_24 <- legis_primary_24 |>
-  select(District, Total) |>
-  mutate(District = gsub("Legislative District Code ", "", District)) |>
-  mutate(District = str_trim(District,side="both")) |>
-  mutate(District = sub("^0+", "", District))
-cleaned_legis_population <- legis_population |>
-  rename(District = 2, population = 4) |>
-  select(2,4) |>
-  mutate(District = gsub("State Legislative District ", "", District)) |>
-  mutate(District = gsub("State Legislative Subdistrict ", "", District)) |>
-  separate(District, c("District", "x", "y"), sep=' ') |>
-  select(1,4) |>
-  mutate(District = str_trim(District,side="both"))
-regis_population_legis_primary_24 <- total_legis_primary_24 |>
-  left_join(cleaned_legis_population, join_by(District)) |>
-  mutate(Percent = (Total/population)*100)
-#General24
-total_legis_general_24 <- legis_general_24 |>
-  select(District, Total) |>
-  mutate(District = gsub("Legislative District Code ", "", District)) |>
-  mutate(District = str_trim(District,side="both")) |>
-  mutate(District = sub("^0+", "", District))
-regis_population_legis_general_24 <- total_legis_general_24 |>
-  left_join(cleaned_legis_population, join_by(District)) |>
-  mutate(Percent = (Total/population)*100)
 
-#Compare to the result
-#Clean the result
-legis_result_cleaned <- legis_result |>
-  rename(District = 1, UNA_result = 7) |>
-  mutate(Other_result = GRN_result+LIB_result+NON_result) |>
-  select(District,DEM_result,REP_result,UNA_result,Other_result) |>
-  mutate(Total_result = DEM_result + REP_result + UNA_result + Other_result) |>
-  mutate(DEM_result_per = (DEM_result/Total_result)*100) |>
-  mutate(REP_result_per = (REP_result/Total_result)*100) |>
-  mutate(UNA_result_per = (UNA_result/Total_result)*100) |>
-  mutate(Other_result_per = (Other_result/Total_result)*100) |>
-  mutate(DEM_REP_result = DEM_result_per-REP_result_per) |>
-  mutate(REP_UNA_result = REP_result_per-UNA_result_per) |>
-  mutate(DEM_UNA_result = DEM_result_per-UNA_result_per)
+legis_result_sorted <- legis_result |>
+  arrange(desc(unf_percentage))
+
+
+head(legis_result_sorted, 10)
 ```
 
 Q4. At the *Precinct level*
@@ -1784,7 +1663,23 @@ county_result_cleaned <- pres_election_result_county |>
 
 *Q2 At the congressional district level, we can indicate primary and general voter registrations for each party and compare them to registration data from the previous election in 2020. We can find the pattern of voter registrations in most districts, compare them to the presidential election results pattern, and find the proportion of people who registered to vote compared to all populations in each district.*
 
-*Q3 Same as the congressional district level, at legislative district, we can indicate primary and general voter registrations for each party and compare them to registration data from the previous election in 2020. We can find the pattern of voter registrations in most districts, compare them to the presidential election results pattern, and find the proportion of people who registered to vote compared to all populations in each district.*
+*Q3 What we do know*
+Closest_races shows the difference between Democratic result and Republican result. The narrow margin indicates a competitive race. We think the close races could be newsworthy because
+1. they may lead to recounts or more intense campaigning in future elections
+2. the significance of the district may impact the outcome of state elections
+3. they may signal a potential shift in voter preferences.
+Some districts identified are:
+district 33, 30 covering parts of Anne Arundel County
+District 38 which covers Somerset County, Worcester County and part of Wicomico County
+District 29 covering parts of Calvert County and St. Mary's County
+District 2 part of Washington County
+District 12, 42 - parts of Baltimore County and Howard County.
+District 34 - parts of Harford County.
+
+*What we don't know:*
+Historical trends are not part of the current dataset, so we don't know if these close races represent an ongoing trend or a one time occurrence.
+We are not sure whether the Unaffiliated (UNF) voters in these districts are playing a decisive role or not. A quick skim led us to believe it is a trivial number but it'd be good to have definite stats applied to it because we know from class that unaffiliated voters are the highest growing party in MD. So far it has not gone beyond 1.4% of the makeup of the voter turnout. The highest is in Talbot County.
+We don't have data for all 47 districts in the MD. Our data has granular data on subdivisions within certain districts but not all districts as a whole.*
 
 *Q4 At the precinct level, we cannot work on questions asking about registrations and population due to the lack of data. However, we can find the pattern of presidential election results in each precinct.*
 
@@ -1797,7 +1692,7 @@ county_result_cleaned <- pres_election_result_county |>
 
 *Q2 At the congressional district level, the voter registration pattern in District 1 could be most newsworthy as it is the only district where people registered for Republican more than Democrats.*
 
-*Q3 At the legislative level, in most areas, there were registrations for Democrats more than Republicans except in 22 Districts most of which are located at the northern border of Maryland. This could be interesting and newsworthy.*
+*Q3 District 12, 42 - parts of Baltimore County and Howard County. This was interesting to see because throughout the course of this semester we have seen that these counties lean heavily democrat. It'd be interesting to talk to the residents from these counties and campaign to them.*
 
 *Q4 At the precinct level, in Allegany where Republicans had a big win, precinct ID 2600 could be newsworthy as it was the only area in which Democrats won; similarly, in Montgomery County where Democrats had a big win, precinct ID 107 and 1201 could be newsworthy as they were only two areas in which that Republicans won.*
 
