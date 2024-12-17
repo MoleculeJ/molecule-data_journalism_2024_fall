@@ -1698,47 +1698,555 @@ We don't have data for all 47 districts in the MD. Our data has granular data on
 
 *Q5 We think the most newsworthy aspect of registration data at the county level is registrations for Republicans and Unaffiliated. Most counties had the same pattern reflecting that registrations for Republicans were more than those for Unaffiliated except in Montgomery, Prince George's, Charles, Frederick, and Howard.*
 
-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------
 
-*Deliverable 5: The Final Memo and All the Code Works*
+*Deliverable 5: The Final Memo and All the Coding Work*
 
-Memo: 
+DATA ANALYSIS PROJECT - FINAL MEMO
 
-Story 2: Democratic outliers in the Congressional District where Republicans dominate.
+After the 2024 general election, we'll see many voting trends and patterns related to elections reoccur with numerous races, areas, and many levels of administrative districts in Maryland that confirm our understanding of the area. However, if we look closer, we'll find some variations or outliers among counties, congressional districts, legislative districts, or precincts that contradict what happened in the areas nearby or the general comprehension of the people's behaviors in those areas. These are what we think could lead to interesting stories.
 
-In Maryland's Congressional District 1 where most of the people registered to vote for Republicans and it was the only area in Maryland where Republicans won seats in the House, there were variations when looking into each county in this area. Although it seemed like Republicans had a successful performance in District 1 as it had a big win in the Representative race, and Presidential race from the past 2024 general election, there were 3 counties in this area which were Dorchester, Wicomico, and Kent where people registered for Democrats more than Republicans in both 2024 and 2020 elections. We considered taking a closer look at why these 3 counties were the outliers in terms of the characteristics of their population could be interesting and newsworthy. 
+---
+
+*(Story from Q1)*
+Unaffiliated Voters Rise in Maryland Registrations but Disappear on Election Day for Presidential Race but not for Senate.
+
+New Findings:
+
+When comparing voter registration to actual voter turnout in Frederick and Calvert counties, stark trends emerge that highlight the dynamics of voter behavior. At the presidential level, "Other Candidates" and unaffiliated voters saw dramatic decreases in actual votes compared to their registration numbers. In Frederick County, unaffiliated voters cast only 5% of the votes relative to their registration, a decline of 95%, while Calvert County exhibited a similar pattern with a 94.75% drop. These findings emphasize that, despite growth in registrations for smaller parties and unaffiliated voters, a significant majority gravitate toward major parties—Republican or Democratic—when making decisive choices in presidential elections. Similarly, smaller parties like the Libertarian and Green parties faced steep declines, with a 27.21% drop in Frederick County and a striking 56.72% in Calvert County.
+
+Interestingly, this trend does not hold at the Senate level. In both counties, smaller parties outperformed expectations based on their registrations. In Frederick County, secondary party votes exceeded registration numbers by 33.07%, and in Calvert County, this increase was even more pronounced at 38.19%. This sharp contrast highlights how partisanship dominates at the presidential level, whereas voters may lean toward alternative options in less nationally polarized contests, such as Senate races.
+
+These results not only confirm the strength of bipartisan loyalty during critical elections but also hint at nuanced voter behavior in less prominent races. This pattern aligns with broader findings from Maryland, where registrations for "Other Candidates" and unaffiliated voters have grown but fail to fully translate into votes during presidential elections.
+
+Final Narrative:
+
+Maryland's elections data reveals a fascinating disconnect between voter registrations and actual turnout, with smaller parties and unaffiliated voters seeing dramatic declines in participation at the presidential level. While smaller parties and unaffiliated groups gained popularity in registration numbers compared to prior elections, their influence sharply decrease when voters faced critical choices.
+
+Maryland's voter registration and turnout data from the 2024 elections reveal compelling insights into voter behavior and the dynamics of party affiliation. Comparing the general election registration totals to the primary elections, both major parties - Democratic and Republican - experienced declines in registrations, while other parties and unaffiliated registrants showed significant increases. These trends also extend to changes since the 2020 elections, with the Democratic Party losing 1.24% in the primary and 2.27% in the general, while unaffiliated registrants rose by 40.24% in the primary and 18.36% in the general. Despite these shifts, overall voter turnout reached 68.23% in the general elections, highlighting strong political engagement relative to the state's population.
+
+The comparison between voter registration and actual turnout in the 2024 presidential election underscores a persistent reliance on major parties during critical decision-making moments. Notably, the Republican Party gained over 19,000 more votes than registered, while the Democratic Party lost over 350,000 voters. Secondary parties and unaffiliated registrants saw sharp drops in actual votes, emphasizing a voter tendency to revert to traditional bipartisan dynamics during national elections, despite the growing popularity of alternative affiliations.
+
+When focusing on Frederick and Calvert counties, the contrast between voter behavior in presidential and Senate races becomes apparent. At the presidential level, unaffiliated voters saw dramatic declines in turnout compared to their registrations, with drops of 95% in Frederick and 94.75% in Calvert. Smaller parties, such as the Libertarian and Green parties, also faced significant losses. However, at the Senate level, secondary parties outperformed expectations, gaining 33.07% more votes than registrations in Frederick and 38.19% in Calvert. These findings suggest that while presidential elections amplify partisanship, Senate races provide opportunities for smaller parties to attract broader support.
+
+In conclusion, Maryland's 2024 election data illustrate a complex interplay between voter registration trends, turnout patterns, and the impact of partisanship across different types of races. While major parties dominate presidential elections, nonpartisan and local contests show more nuanced voter behavior.
+
+--- 
+
+*(Story from Q2)*
+Democratic outliers in the Congressional District where Republicans dominate.
+
+In Maryland's Congressional District 1 where most of the people registered to vote for Republicans and it was the only area in Maryland where Republicans won seats in the House, there were variations when looking into each county in this area. Although it seemed like Republicans had a successful performance in District 1 as it had a big win in the Representative race, and Presidential race from the past 2024 general election, there were 3 counties in this area which were Dorchester, Wicomico, and Kent where people registered for Democrats more than Republicans in both 2024 and 2020 elections. We considered taking a closer look at why these 3 counties were the outliers in terms of the characteristics of their population leading to different decision-making in registration to vote could be interesting and newsworthy.
 
 According to the analysis, we got the registration data for each of Maryland's counties from 2024 and 2020. We scoped down to see only counties located in Congressional District 1. We found that every county had registration for Republicans more than Democrats except Dorchester, Wicomico, and Kent which had people registered for Democrats more than Republicans for 0.40%, 2.18%, and 2.55% in 2024 and 5.04%, 5.52%, and 7.50% in 2020 respectively. As we researched, no news story has covered this angle so far.
 
-However, we didn't include Baltimore County in this analysis because some parts of this county were located in Congressional District 2 and we didn't have the exact registration data for only parts of Baltimore County that were in District 1. However, the strength of these data sets was that we could trace the registration data back to 2012 to see if there were trends or changes in registration data in District 1 counties. 
+However, we didn't include Baltimore County in this analysis because some parts of this county were located in Congressional District 2 and we didn't have the exact registration data for only parts of Baltimore County that were in District 1. However, the strength of these data sets was that we could trace the registration data back to 2012 to see if there were trends or changes in registration data in District 1 counties.
 
-To produce this story, we might begin by looking at the registration data in Dorchester, Wicomico, and Kent Counties in the past to confirm if people were always registered for Democrats more than Republicans or if there were any significant changes throughout many years. Then, we could look at https://censusreporter.org/ to get basic information about these 3 counties regarding population, age, race, economic status, etc., and compare them with other counties in District 1. Finally, we could contact Blane H. Miller III, a Democratic candidate who ran for the Representative race in District 1, or his team to ask about the characteristics of voters who voted for him from Dorchester, Wicomico, and Kent Counties which seemed like the majority of votes that he received from the past election. 
+To produce this story, we might begin by looking at the registration data in Dorchester, Wicomico, and Kent Counties in the past to confirm if people were always registered for Democrats more than Republicans or if there were any significant changes throughout many years. Then, we could look at https://censusreporter.org/ to get basic information about these 3 counties regarding population, age, race, economic status, etc., and compare them with other counties in District 1. Finally, we could contact Blane H. Miller III, a Democratic candidate who ran for the Representative race in District 1, or his team to ask about the characteristics of voters who voted for him from Dorchester, Wicomico, and Kent Counties which seemed like the majority of votes that he received from the past election.
+
+---
+
+*(Story from Q3)*
+Diverging Turnout in Maryland’s District 35
+
+Legislative district-level voter turnout data revealed a very interesting finding. We looked at the change in voter turnout from the general election of 2020 and the general election of 2024. The top four legislative districts with a positive voter turnout change, i.e. more voters in 2024 than 2020 were Legislative District Code 35A, 40, 41, and 45. 
+
+The top four legislative districts with a negative voter turnout change, i.e., more voters in 2020 than in 2024 were, Legislative District Code 09A, 32, 35B, and 42B.
+
+What is interesting here is that Legislative District 35 shows up in both the highest and lowest voter turnout data. District 35 spans Cecil and Harford Counties with the same overall geographic area but with notable turnout disparities.
+
+District 35A:
+Vote change: +38,428 votes
+Percentage increase: 129%
+Population (2020): 45,011
+Voting-age population: 35,002
+Registered voters: 29,615
+
+District 35B:
+Vote change: -31,698 votes
+Percentage decrease: -49%
+Population (2020): 87,260
+Voting-age population: 67,801
+Registered voters: 64,272
+
+(Population, voting age population, and registered voters data are taken from Wikipedia. 35A and 35B)
+The larger population in 35B makes the 49% vote decrease more striking. 
+
+This could be due to a variety of factors. We are interested in investigating whether it is a data quality issue. Otherwise, 35A and 35B might have different partisan leanings, and voter turnout could vary depending on the candidates or political climate in each sub-district. It could also be due to polling place accessibility. One sub-district could have experienced a surge in voter engagement due to local issues. 
+
+To produce a story, we would be interested in exploring local election campaigns, specific local issues in each sub-district, and population mobility. We could compare these trends to broader regional and state-wide patterns. We are also interested in figuring out whether there were notable redistricting efforts.
+
+---
+
+*(Story from Q4)*
+Precincts outliers in counties where Republicans and Democrats had a big win.
+
+In Allegany County where Republicans won the presidential race in most of the precincts, there was 1 precinct, ID "2600", where the Democrats won. This precinct covered the area of the city named "Frostburg". On the contrary, in Montgomery County where Democrats won the same race in most precincts, there were 2 precincts, ID "107" and "1201", where Republicans won. Precincts 107 and 1201 covered the north-western and northern parts of the zip code 20882 area which we understood was a part of the city named "Gaithersburg". We viewed that as these 3 precincts were the outliers of their surrounding areas, telling the story about how they were different from their neighbors in terms of demographic, economic status, or other aspects could be an interesting story.
+
+In our analysis, we looked into presidential election results at the precinct level and indicated which party won in each precinct. Then, we grouped precincts located in the same counties together to see how many precincts the Democrats won and how many the Republicans won in each county. We found that out of 30 precincts in Allegany, "2600" was the only precinct where people voted for Democrats more than Republicans, and out of 257 precincts in Montgomery, "107" and "1201" were only 2 precincts where people voted for Republican more than Democrat.
+
+As we didn't have registration data and population data of these 3 precincts, we might not have been able to compare the election results with registration data to see if they were in line with each other or compare with the population data to see what were the percentage of people who voted for Democrats and who voted for Republicans compared to the whole population, but we could still investigate other aspects.
+
+Nonetheless, before proceeding with the investigation, we should make sure that the territories of these 3 precincts as we understood were correct. We could contact election officials in Allegany and Montgomery and ask them to confirm this information. When we could identify the accurate areas, we could look at https://censusreporter.org/ to get a grasp on basic information about these precincts before conducting the interviews with sources that could answer about demography, economics, or general aspects of these areas and how they were different from nearby neighborhood which could lead to the different decision in presidential voting. We could ask the mayor of the town that these precincts were based in or people who live in these areas.
+
+---
+
+*(Story from Q5)*
+Trump's performance in 3 presidential races repeated the same pattern in every Maryland county, except in 6 counties. 
+
+President Donald Trump performed better in the presidential race in the 2024 general election in almost every Maryland county with a higher percentage of votes than those in his previous race in 2020. Nonetheless, this result did not surpass his performance in the 2016 presidential election. This pattern occurred in every county except Baltimore City, Dorchester, Montgomery, Garrett, Prince George's, and Somerset which showed some variations that we considered could lead to interesting stories. 
+
+According to our analysis, we calculated the percentage of votes Trump got from the 2024, 2020, and 2016 races compared to the total votes that he and another main candidate from Democrat in the same race got. We found that in almost every Maryland county, he had a better performance this year compared to what he did in 2020, but it was not on par with what happened in 2016 except in these 6 counties. 
+
+In Baltimore City, Dorchester, and Montgomery, Trump's political comeback this year outperformed what he did in both 2020 and 2016. He gained 12.54% of votes this year compared to 10.91% in 2020 and 11.06% in 2016 for Baltimore City, gained 57.45% of votes this year compared to 56.10% in 2020 and 57.40% in 2016 for Dorchester, and gained 22.56% of votes this year compared to 19.44% in 2020 and 20.58% in 2016 for Montgomery. These are quite interesting, especially in counties that Democrats dominated in many races like Baltimore City and Montgomery.
+
+In Prince George's and Somerset, Trump's performance kept getting better over 3 presidential election races. He gained 8.71% of votes in 2016, 8.91% in 2020, and 11.48% in 2024 for Prince George's which usually is the county that leans to Democrats and gained 56.00% of votes in 2016, 57.51% in 2020, and 58.88% in 2024 for Somerset.
+
+And in Garrett where most of the people voted for Republicans, Trump's performance was declining. He gained 80.76% of votes in 2016, 78.53% in 2020, and down to 77.62% in 2024 while obtained votes in other counties rose.
+
+As we researched, there were some news stories (https://cnsmaryland.org/2024/11/13/trump-makes-inroads-in-true-blue-maryland/) that had already covered this stat, however, they just talked about the result in an overview picture but didn't compare this year's result to the 2016's outcome. Most importantly, we didn't find any stories that talked about these 6 outlier counties specifically. Hence, we thought we could delve a little deeper into them. To produce the stories, we might start by looking at demographic changes in these counties that might explain why voting trends for Trump diverged from other counties. Furthermore, if possible, we might talk to county executives in these areas to get more insightful info about the population. 
+
+---
+
+ALL THE CODING WORK
+
+```{r}
+#Load Libraries 
+library(tidyverse)
+library(janitor)
+library(tidycensus)
+library(rvest)
+library(dplyr)
+```
+
+Q1. (new focus) *Bipartisan issue in Presidential and Senate race*
+
+```{r}
+#Prep dataframe for Q1 focusing on Maryland
+#Registration Data
+md_primary_24 <- read_csv("data/county/county_primary_24.csv")
+md_general_24 <- read_csv("data/county/county_general_24.csv")
+md_primary_20 <- read_csv("data/county/county_primary_20.csv")
+md_primary_20 <- md_primary_20 |>
+  rename(County = 1)
+md_general_20 <- read_csv("data/county/county_general_20.csv")
+#Population Data
+state_population <- get_acs(geography="state", 
+                       variables = "B01003_001", 
+                       year=2022)
+md_population <- state_population |>
+  slice(21)
+#Presidential Election Result
+pres_election_result_url <- "https://elections.maryland.gov/elections/2024/general_Results/gen_results_2024_1.html"
+pres_election_result_html <- pres_election_result_url |>
+  read_html() |>
+  html_table()
+pres_election_result <- pres_election_result_html[[1]]
+pres_election_result <- pres_election_result |> clean_names()
+pres_election_result <- pres_election_result |>
+    slice(-c(34, 35))
+```
+```{r}
+#voters registered for each party in 2024 primary election
+total_md_primary_24 <- md_primary_24 |> 
+    mutate(OTH = OTH + NLM + LIB) |>
+  summarise(
+    DEM_tot = sum(DEM),
+    REP_tot = sum(REP),
+    OTH_tot = sum(OTH),
+    UNA_tot = sum(UNA)
+  )
+```
+```{r}
+#voters registered for each party in 2024 general election
+total_md_general_24 <- md_general_24 |> 
+  mutate(OTH = OTH + GRN + NLM + LIB) |> 
+summarise(
+    DEM_tot = sum(DEM),
+    REP_tot = sum(REP),
+    OTH_tot = sum(OTH),
+    UNA_tot = sum(UNA)
+  )
+```
+```{r}
+#voters registered for each party in 2020 primary election
+total_md_primary_20 <- md_primary_20 |>
+  mutate(OTH = OTH + BAR + WCP) |>
+  summarise(
+    DEM_tot = sum(DEM),
+    REP_tot = sum(REP),
+    OTH_tot = sum(OTH),
+    UNA_tot = sum(UNA)
+  )
+```
+```{r}
+#voters registered for each party in 2020 general election
+total_md_general_20 <- md_general_20 |>
+  mutate(OTH = OTH + BAR + WCP + GRN + LIB) |>
+  summarise(
+    DEM_tot = sum(DEM),
+    REP_tot = sum(REP),
+    OTH_tot = sum(OTH),
+    UNA_tot = sum(UNA)
+  )
+```
+```{r}
+#How have these numbers changed compared to those in previous elections?*
+total_md_primary_24 <- total_md_primary_24 |> 
+  mutate(Year = 2024)
+total_md_general_24 <- total_md_general_24 |> 
+  mutate(Year = 2024)
+total_md_primary_20 <- total_md_primary_20 |> 
+  mutate(Year = 2020)
+total_md_general_20 <- total_md_general_20 |> 
+  mutate(Year = 2020)
+comparison_general <- bind_rows(total_md_general_24, total_md_general_20) |>
+select(Year, everything())
+comparison_primary <- bind_rows(total_md_primary_24, total_md_primary_20) |>
+select(Year, everything())
+```
+```{r}
+#percentage difference between 2024 and 2022 per each party in geenral elections
+comparison_general <- comparison_general|>
+    mutate(
+    DEM_pct_diff = (DEM_tot[1] - DEM_tot[2]) / DEM_tot[2] * 100,
+    REP_pct_diff = (REP_tot[1] - REP_tot[2]) / REP_tot[2] * 100,
+    OTH_pct_diff = (OTH_tot[1] - OTH_tot[2]) / OTH_tot[2] * 100,
+    UNA_pct_diff = (UNA_tot[1] - UNA_tot[2]) / UNA_tot[2] * 100
+  )
+```
+```{r}
+#percentage difference between 2024 and 2022 per each party in primary elections
+comparison_primary <- comparison_primary|>
+    mutate(
+    DEM_pct_diff = (DEM_tot[1] - DEM_tot[2]) / DEM_tot[2] * 100,
+    REP_pct_diff = (REP_tot[1] - REP_tot[2]) / REP_tot[2] * 100,
+    OTH_pct_diff = (OTH_tot[1] - OTH_tot[2]) / OTH_tot[2] * 100,
+    UNA_pct_diff = (UNA_tot[1] - UNA_tot[2]) / UNA_tot[2] * 100
+  )
+```
+```{r}
+#voters registered for general 2024 in proportion to population
+proportion_md_general_24 <- md_general_24 |>
+  summarise(
+    total_voters = sum(TOTAL),
+    MD_pop = "6161707",
+    pct_voters = (total_voters / 6161707) *100
+  )
+```
+```{r}
+#voters registered for primary 2024 in proportion to population
+proportion_md_primary_24 <- md_primary_24 |>
+  summarise(
+    total_voters = sum(TOTAL),
+    MD_pop = "6161707",
+    pct_voters = (total_voters / 6161707) *100
+  )
+```
+```{r}
+#*1.3 Compared to the 2024 presidential election result, does the registration pattern match with the result?*
+party_elections_results <- pres_election_result |>
+  mutate(
+    total = as.numeric(gsub(",", "", total))  
+  ) |>
+  group_by(party) |> 
+  summarise(
+    Total_votes = sum(total)  
+  )
+party_elections_results <- party_elections_results |> 
+  mutate(
+    Total_votes = if_else(party == "Other Candidates", 
+                          Total_votes + sum(Total_votes[party %in% c("Green", "Libertarian")]), 
+                          Total_votes)
+  ) |> 
+  filter(!party %in% c("Green", "Libertarian"))
+```
+```{r}
+total_md_general_24_transformed <- total_md_general_24 |> 
+  pivot_longer(
+    cols = c(DEM_tot, REP_tot, OTH_tot, UNA_tot),  
+    names_to = "party",                          
+    values_to = "Total_votes"                   
+  ) |> 
+  mutate(
+    party = case_when(                           
+      party == "DEM_tot" ~ "Democratic",
+      party == "REP_tot" ~ "Republican",
+      party == "OTH_tot" ~ "Other Candidates",
+      party == "UNA_tot" ~ "Unaffiliated",
+      TRUE ~ party
+    )
+  ) |> 
+  select(party, Total_votes)
+```
+```{r}
+comparison_general_elections <- full_join(party_elections_results, total_md_general_24_transformed, by = "party") |>
+  rename(Total_election = Total_votes.x, Total_general = Total_votes.y) |>
+    mutate(
+    Difference = Total_election - Total_general 
+    )
+```
+```{r}
+#extract registration results in Frederick
+
+frederick_registration <- md_general_24 |>
+  filter(County == "Frederick") |>
+  mutate(
+    OTH = OTH + LIB + NLM + GRN
+  ) |>
+  select(-LIB, -NLM, -GRN)
+```
+```{r}
+#extract registration results in Calvert
+calvert_registration <- md_general_24 |>
+  filter(County == "Calvert") |>
+    mutate(
+    OTH = OTH + LIB + NLM + GRN
+  ) |>
+  select(-LIB, -NLM, -GRN)
+```
+```{r}
+# presidential election Frederick data
+frederick_pres_results <- tibble::tibble(
+  County = "Frederick",
+  DEM = 82409,
+  REP = 68753,
+  UNA = 1494 + 1110,
+  OTH = 1378 + 970,
+  TOTAL = 82409 + 68753 + 970 + 1378 + 1494 + 1110
+)
+```
+```{r}
+#presidential election Calvert data
+
+calvert_pres_results <- read.csv("data/county/calvert_presidential_off.csv", header = FALSE) 
+colnames(calvert_pres_results) <- c("candidate", "party", "Early Voting",	"Election Day",	"Mail-In", "Ballot	Provisional", "Total", "Percentage")
+```
+```{r}
+#Calvert presidential
+
+calvert_pres_results <- calvert_pres_results|>
+mutate(across(everything(), ~ replace_na(., "Unaffiliated")))
 
 
+#clean Calvert presidential
+calvert_pres_results_clean <- calvert_pres_results |>
+  mutate(
+    Total = as.numeric(gsub(",", "", Total)), 
+  ) |>
+  group_by(party) |> 
+  summarise(
+    Total_votes = sum(Total, na.rm = TRUE)  
+  )|>
+  slice(-1)
+
+#Add Write-ins vote to Unaffiliated - Calvert presidential
+calvert_pres_results_clean <- calvert_pres_results_clean |> 
+   mutate(
+       Total_votes = if_else(party == "Unaffiliated", Total_votes + 274, Total_votes),
+  )
+
+#Summing the votes of Green, Libertarian - Calvert presidential
+calvert_pres_results_final <- calvert_pres_results_clean |>
+  bind_rows(
+    calvert_pres_results_clean |> 
+      filter(party %in% c("Green", "Libertarian")) |> 
+      summarise(
+        party = "Other candidates", 
+        Total_votes = sum(Total_votes, na.rm = TRUE)  # Sum of votes for these parties
+      )
+  )
+
+#Adding Other Candidates to Other candidate - Calvert presidential
+calvert_pres_results_final <- calvert_pres_results_final |> 
+   mutate(
+       Total_votes = if_else(party == "Other candidates", Total_votes + 8, Total_votes),
+  )|>
+  slice(-2,-3,-4) |>
+  mutate(party = if_else(party == "Other candidates", "Other Candidates", party))
+
+```
+```{r}
+#senate election Frederick data
+
+frederick_senate_results <- tibble::tibble(
+  County = "Frederick",
+  DEM =  66280,
+  REP = 83767,
+  UNA = 2 + 348 + 79,
+  OTH = 4293,
+  TOTAL =  66280 + 83767 + 4293 + 79 + 2 + 348 
+)
+```
+```{r}
+#senate election Calvert data
+
+calvert_senate_results <- read.csv("data/county/calvert_senate_off.csv", header = FALSE)
+colnames(calvert_senate_results) <- c("candidate", "party", "Early Voting",	"Election Day",	"Mail-In", "Ballot	Provisional", "Total", "Percentage")
+
+```
+```{r}
+#Calvert senate
+
+calvert_senate_results <- calvert_senate_results|>
+mutate(across(everything(), ~ replace_na(., "Unaffiliated")))
+
+#clean Calvert Senate
+
+calvert_senate_results_clean <- calvert_senate_results |>
+  mutate(
+    Total = as.numeric(gsub(",", "", Total)), 
+  ) |>
+  group_by(party) |> 
+  summarise(
+    Total_votes = sum(Total, na.rm = TRUE)  
+  )|>
+  slice(-1)
+
+#Add Write-ins vote to Unaffiliated - Calvert senate
+calvert_senate_results_clean <- calvert_senate_results_clean |> 
+   mutate(
+       Total_votes = if_else(party == "Unaffiliated", Total_votes + 95, Total_votes),
+  )
+
+#Summing the votes of Libertarian and Green to other candidates - Calvert senate
+calvert_senate_results_final <- calvert_senate_results_clean |>
+  bind_rows(
+    calvert_senate_results_clean |> 
+      filter(party %in% c("Green","Libertarian")) |> 
+      summarise(
+        party = "Other candidates", 
+        Total_votes = sum(Total_votes, na.rm = TRUE)  # Sum of votes for these parties
+      )
+  )
+
+#Adding Other Candidates to Other candidate - Calvert senate
+calvert_senate_results_final <- calvert_senate_results_final |> 
+   mutate(
+       Total_votes = if_else(party == "Other candidates", Total_votes + 24, Total_votes),
+  )|>
+  slice(-2,-3) |>
+  mutate(party = if_else(party == "Other candidates", "Other Candidates", party))
+```
+```{r}
+#transform Frederick registration results
+
+frederick_registration_trans <- frederick_registration |> 
+  pivot_longer(
+    cols = c(DEM, REP, OTH, UNA),  
+    names_to = "party",                          
+    values_to = "Total_votes"                   
+  ) |> 
+  mutate(
+    party = case_when(
+      party == "DEM" ~ "Democratic",
+      party == "REP" ~ "Republican",
+      party == "UNA" ~ "Unaffiliated",
+      party == "OTH" ~ "Other Candidates",
+      TRUE ~ party
+    )
+  ) |>
+  select(party, Total_votes)
+```
+```{r}
+#transform Calvert registration results
+calvert_registration_trans <- calvert_registration |> 
+  pivot_longer(
+    cols = c(DEM, REP, OTH, UNA),  
+    names_to = "party",                          
+    values_to = "Total_votes"                   
+  ) |> 
+  mutate(
+    party = case_when(
+      party == "DEM" ~ "Democratic",
+      party == "REP" ~ "Republican",
+      party == "UNA" ~ "Unaffiliated",
+      party == "OTH" ~ "Other Candidates",
+      TRUE ~ party
+    )
+  ) |>
+  select(party, Total_votes)
+
+```
+```{r}
+#transform Frederick presidential results
+frederick_pres_results_trans <- frederick_pres_results |>
+  pivot_longer(
+    cols = c(DEM, REP, OTH, UNA),  
+    names_to = "party",                          
+    values_to = "Total_votes"                   
+  ) |> 
+  mutate(
+    party = case_when(                           
+      party == "DEM" ~ "Democratic",
+      party == "REP" ~ "Republican",
+      party == "OTH" ~ "Other Candidates",
+      party == "UNA" ~ "Unaffiliated",
+      TRUE ~ party
+    )
+  ) |> 
+  select(party, Total_votes)
+```
+```{r}
+#transform Frederick senate results
+
+frederick_senate_trans <- frederick_senate_results |> 
+  pivot_longer(
+    cols = c(DEM, REP, OTH, UNA),  
+    names_to = "party",                          
+    values_to = "Total_votes"                   
+  ) |> 
+  mutate(
+    party = case_when(
+      party == "DEM" ~ "Democratic",
+      party == "REP" ~ "Republican",
+      party == "UNA" ~ "Unaffiliated",
+      party == "OTH" ~ "Other Candidates",
+      TRUE ~ party
+    )
+  ) |>
+  select(party, Total_votes)
+```
+```{r}
+#comparison presidential and registrations Frederick
+
+comparison_frederick_presidential <- full_join(frederick_pres_results_trans, frederick_registration_trans, by = "party") |>
+  rename(Total_presidential = Total_votes.x, Total_registration = Total_votes.y) |>
+    mutate(
+    Difference = Total_presidential - Total_registration,
+    Percent_difference = (Difference / Total_registration) * 100
+    )
 
 
-Story 4: Precincts outliers in counties where Republicans and Democrats had a big win. 
+#comparison senate and registration Frederick
 
-In Allegany County where Republicans won the presidential race in most of the precincts, there was 1 precinct, ID "2600", where the Democrats won. This precinct covered the area of the city named "Frostburg". On the contrary, in Montgomery County where Democrats won the same race in most precincts, there were 2 precincts, ID "107" and "1201", where Republicans won. Precincts 107 and 1201 covered the north-western and northern parts of the zip code 20882 area which we understood was a part of the city named "Gaithersburg". We viewed that as these 3 precincts were the outliers of their surrounding areas telling the story about how they were different from their neighbors in terms of demographic, economic status, or other aspects could be an interesting story. 
-
-In our analysis, we looked into presidential election results at the precinct level and indicated which party won in each precinct. Then, we grouped precincts located in the same counties together to see that in each county, how many precincts the Democrats won and how many the Republicans won. We found that out of 30 precincts in Allegany, "2600" was the only precinct where people voted for Democrats more than Republicans, and out of 257 precincts in Montgomery, "107" and "1201" were only 2 precincts where people voted for Republican more than Democrat. 
-
-As we didn't have registration data and population data of these 3 precincts, we might not have been able to compare the election results with registration data to see if they were in line with each other or compare with the population data to see what were the percentage of people who voted for Democrats and who voted for Republicans compared to the whole population. Nonetheless, we could still investigate other aspects. 
-
-Nonetheless, before proceeding with the investigation, we should make sure that the territories of these 3 precincts as we understood were correct. We could contact election officials in Allegany and Montgomery and ask them to confirm this information. When we could identify the accurate areas, we could look at https://censusreporter.org/ to get a grasp on basic information about these precincts before conducting the interviews with sources that could answer about demography, economics, or general aspects of these areas and how they were different from nearby neighborhood which could lead to the different decision in presidential voting. We could ask the mayor of the town that these precincts were based in or people who live in these areas.   
-
+comparison_frederick_senate <- full_join(frederick_senate_trans, frederick_registration_trans, by = "party") |>
+  rename(Total_senate = Total_votes.x, Total_registration = Total_votes.y) |>
+    mutate(
+    Difference = Total_senate - Total_registration,
+    Percent_difference = (Difference / Total_registration) * 100
+    )
 
 
+#comparison presidential and registrations Calvert
 
+comparison_calvert_presidential <- full_join(calvert_pres_results_final, calvert_registration_trans, by = "party") |>
+  rename(Total_presidential = Total_votes.x, Total_registration = Total_votes.y) |>
+    mutate(
+    Difference = Total_presidential - Total_registration,
+    Percent_difference = (Difference / Total_registration) * 100
+    )
 
+#comparison senate and registration Calvert
 
+comparison_calvert_senate <- full_join(calvert_senate_results_final, calvert_registration_trans, by = "party") |>
+  rename(Total_senate = Total_votes.x, Total_registration = Total_votes.y) |>
+    mutate(
+    Difference = Total_senate - Total_registration,
+    Percent_difference = (Difference / Total_registration) * 100
+    )
 
-
-
-
-
-
-All the Code
+```
 
 Q2. *Congressional District level*
 
@@ -2118,11 +2626,150 @@ District1_county_result_cleaned <- county_result_cleaned |>
   filter(County %in% c("Baltimore County", "Caroline", "Cecil", "Dorchester", "Harford", "Kent", "Queen Anne's", "Somerset", "Talbot", "Wicomico", "Worcester"))
 ```
 
+Q3. *Legislative District level*
+
+```{r}
+#Prep dataframe for Q3 focusing on legislative district level
+
+#Registration Data
+legis_primary_24 <- read_csv("data/legis_level/legis_primary_24.csv")
+legis_general_24 <- read_csv("data/legis_level/legis_general_24.csv")
+legis_primary_20 <- read_csv("data/legis_level/legis_primary_20.csv")
+legis_general_20 <- read_csv("data/legis_level/legis_general_20.csv")
+
+#Population Data
+legis_population <- get_acs(geography="state legislative district (lower chamber)", 
+                       variables = "B01003_001", state = "MD", 
+                       year=2022)
+
+#Presidential Election Result 
+#Download Precinct Result and Code
+precint_result <- read_csv("data/legis_level/result/result.csv")
+legis_code <- read_csv("data/legis_level/result/code.csv")
+#Prep result dataframe
+precint_result <- precint_result |>
+  filter(Contest == "President and Vice President of the United States")
+precint_result <- precint_result |>
+  select(2,4,6,7) |>
+  clean_names() |>
+  mutate(precinct_name = as.numeric(gsub("-","", precinct_name)))
+#Prep code dataframe
+legis_code <- legis_code |>
+  select(3,4,10) |>
+  filter(!is.na(ED_PRECINCT)) |>
+  filter(!is.na(LEGISLATIVE_SUB_DISTRICT_CODE))
+#Join result dataframe with code dataframe to generate legislative district results 
+legis_result_draft <- precint_result |> 
+  left_join(legis_code, join_by(jurisdiction==COUNTY_NAME, precinct_name==ED_PRECINCT)) |>
+  filter(!is.na(LEGISLATIVE_SUB_DISTRICT_CODE)) |>
+  group_by(LEGISLATIVE_SUB_DISTRICT_CODE, party) |>
+  summarise(
+    total_votes = sum(total_votes))
+#Reshape dataframe
+legis_result_DEM <- legis_result_draft |>
+  filter(party == "DEM") |>
+  select(1,3) |>
+  rename(DEM_result = 2)
+legis_result_GRN <- legis_result_draft |>
+  filter(party == "GRN") |>
+  select(3) |>
+  rename(GRN_result = 2) 
+legis_result_LIB <- legis_result_draft |>
+  filter(party == "LIB") |>
+  select(3) |>
+  rename(LIB_result = 2)
+legis_result_NON <- legis_result_draft |>
+  filter(party == "NON") |>
+  select(3) |>
+  rename(NON_result = 2)
+legis_result_REP <- legis_result_draft |>
+  filter(party == "REP") |>
+  select(3) |>
+  rename(REP_result = 2)
+legis_result_UNF <- legis_result_draft |>
+  filter(party == "UNF") |>
+  select(3) |>
+  rename(UNF_result = 2)
+legis_result <- bind_cols(legis_result_DEM, legis_result_GRN, legis_result_LIB, legis_result_NON, legis_result_REP, legis_result_UNF) |>
+  select(-3,-5,-7,-9,-11) |>
+  rename(legislative_district_code = 1)
+
+```
+```{r}
+legis_result <- legis_result |>
+  mutate(dem_rep_difference = DEM_result - REP_result)|>
+  mutate(total_votes = DEM_result + GRN_result + LIB_result + NON_result + REP_result + UNF_result)|>
+  arrange(desc(dem_rep_difference))
+
+legis_result <- legis_result |>
+  mutate(
+    party_dominance = case_when(
+      dem_rep_difference > 0 ~ "Democrat Dominant",
+      dem_rep_difference < 0 ~ "Republican Dominant",
+      TRUE ~ "No Clear Winner" # In case of a tie or no votes
+    )
+  )
+dominance_counts <- legis_result |>
+  count(party_dominance)
+print(dominance_counts)
+
+closest_races <- legis_result |>
+  select(legislative_district_code, DEM_result, REP_result) |>
+  mutate(margin = abs(DEM_result - REP_result)) |>
+  arrange(margin) |>
+  head(10) 
+
+legis_result <- legis_result |>
+  mutate(
+    unf_percentage = (UNF_result / total_votes) * 100 
+  )
 
 
+legis_result_sorted <- legis_result |>
+  arrange(desc(unf_percentage))
 
 
+head(legis_result_sorted, 10)
+```
+```{r}
+legis_general_20 <- read_csv("data/legis_level/legis_general_20.csv")
+legis_general_24 <- read_csv("data/legis_level/legis_general_24.csv")
 
+
+legis_general_20 <- legis_general_20 |>
+  mutate(year = 2020)
+
+legis_general_24 <- legis_general_24 |>
+  mutate(year = 2024)
+
+
+combined_data_kriti <- legis_general_20 |>
+  full_join(legis_general_24, by = c("District", "County"), suffix = c("_20", "_24"))
+
+combined_data_kriti <- combined_data_kriti |>
+  mutate(
+    turnout_change = if_else(
+      !is.na(Total_20) & !is.na(Total_24),  #if both columns are non  missing
+      Total_24 - Total_20,
+      NA_real_  # if either Total_20 or Total_24 is missing leaving as Na
+    ),
+    percentage_change = if_else(
+      Total_20 > 0,  #Avoiding division by zero
+      (Total_24 - Total_20)/Total_20 * 100,
+      NA_real_  
+    )
+  )|>
+  arrange(desc(turnout_change))
+
+combined_data_wona<- combined_data_kriti |> # without NA values table
+  drop_na()
+
+head(combined_data_wona, 4)|>
+  select( District,Total_24, Total_20, turnout_change,percentage_change)
+
+tail(combined_data_wona, 4)|>
+  select( District,Total_24, Total_20, turnout_change, percentage_change)
+```
 
 Q4.*Precinct level*
 
@@ -2213,58 +2860,340 @@ precinct_result_pattern_compare <- precinct_result_pattern |>
   mutate(More_REP_percent = (More_REP/county_count)*100)
 ```
 
+Q5. *County Level* 
 
+```{r}
+#Prep dataframe for Q5 focusing on county level
 
+#Registration Data
+county_primary_24 <- read_csv("data/county/county_primary_24.csv")
+county_general_24 <- read_csv("data/county/county_general_24.csv")
+county_primary_20 <- read_csv("data/county/county_primary_20.csv")
+county_primary_20 <- county_primary_20 |>
+  rename(County = 1)
+county_general_20 <- read_csv("data/county/county_general_20.csv")
 
+#Population Data
+county_population <- get_acs(geography="county", 
+                       variables = "B01003_001", 
+                       state = "MD", year=2022)
 
+#Presidential Election Result (county level)
+pres_election_result_county_url <- "https://elections.maryland.gov/elections/2024/general_Results/gen_detail_results_2024_1_1.html"
+pres_election_result_county_html <- pres_election_result_county_url |>
+  read_html() |>
+  html_table()
+pres_election_result_county1 <- pres_election_result_county_html[[1]]
+pres_election_result_county2 <- pres_election_result_county_html[[2]]
+pres_election_result_county2 <- pres_election_result_county2|>
+  select(-1)
+pres_election_result_county3 <- pres_election_result_county_html[[3]]
+pres_election_result_county3 <- pres_election_result_county3|>
+  select(-1)
+pres_election_result_county4 <- pres_election_result_county_html[[4]]
+pres_election_result_county4 <- pres_election_result_county4|>
+  select(-1)
+pres_election_result_county5 <- pres_election_result_county_html[[5]]
+pres_election_result_county5 <- pres_election_result_county5|>
+  select(-1)
+pres_election_result_county6 <- pres_election_result_county_html[[6]]
+pres_election_result_county6 <- pres_election_result_county6|>
+  select(-1)
+pres_election_result_county <- bind_cols(pres_election_result_county1, pres_election_result_county2, pres_election_result_county3, pres_election_result_county4, pres_election_result_county5, pres_election_result_county6)
+```
+```{r}
+#Primary
+#2024
+county_primary_24_count <- county_primary_24 |>
+  summarise(
+    DEM = sum(DEM),
+    REP = sum(REP),
+    LIB = sum(LIB),
+    OTH = sum(OTH),
+    UNA = sum(UNA),
+    NLM = sum(NLM)
+  ) |>
+  mutate(Other = LIB+OTH+NLM) |>
+  select(DEM, REP, UNA, Other) |>
+  rename(DEM24 = 1, REP24 =2, UNA24 = 3, Other24 = 4)
+#2020
+county_primary_20_count <- county_primary_20 |>
+  summarise(
+    BAR = sum(BAR),
+    DEM = sum(DEM),
+    OTH = sum(OTH),
+    REP = sum(REP),
+    UNA = sum(UNA),
+    WCP = sum(WCP)
+  ) |>mutate(Other = BAR+OTH+WCP) |>
+  select(DEM, REP, UNA, Other) |>
+  rename(DEM20 = 1, REP20 =2, UNA20 = 3, Other20 = 4)
+#Find the change
+compare_county_primary_24_20 <- bind_cols(county_primary_24_count, county_primary_20_count) |>
+  mutate(DEM_change = ((DEM24-DEM20)/DEM20)*100) |>
+  mutate(REP_change = ((REP24-REP20)/REP20)*100) |>
+  mutate(UNA_change = ((UNA24-UNA20)/UNA20)*100) |>
+  mutate(Other_change = ((Other24-Other20)/Other20)*100)
 
+#General
+#2024
+county_general_24_count <- county_general_24 |>
+  summarise(
+    DEM = sum(DEM),
+    REP = sum(REP),
+    LIB = sum(LIB),
+    OTH = sum(OTH),
+    UNA = sum(UNA),
+    NLM = sum(NLM),
+    GRN = sum(GRN)
+  ) |>
+  mutate(Other = LIB+OTH+NLM+GRN) |>
+  select(DEM, REP, UNA, Other) |>
+  rename(DEM24 = 1, REP24 =2, UNA24 = 3, Other24 = 4)
+#2020
+county_general_20_count <- county_general_20 |>
+  summarise(
+    DEM = sum(DEM),
+    REP = sum(REP),
+    BAR = sum(BAR),
+    GRN = sum(GRN),
+    LIB = sum(LIB),
+    WCP = sum(WCP),
+    OTH = sum(OTH),
+    UNA = sum(UNA)
+  ) |>
+  mutate(Other = BAR+GRN+LIB+WCP+OTH) |>
+  select(DEM, REP, UNA, Other) |>
+  rename(DEM20 = 1, REP20 =2, UNA20 = 3, Other20 = 4)
+#Find the change
+compare_county_general_24_20 <- bind_cols(county_general_24_count, county_general_20_count) |>
+  mutate(DEM_change = ((DEM24-DEM20)/DEM20)*100) |>
+  mutate(REP_change = ((REP24-REP20)/REP20)*100) |>
+  mutate(UNA_change = ((UNA24-UNA20)/UNA20)*100) |>
+  mutate(Other_change = ((Other24-Other20)/Other20)*100)
 
+#Find Pattern
+#Primary24
+pattern_county_primary_24 <- county_primary_24 |>
+  mutate(Other = LIB+OTH+NLM) |>
+  select(County, DEM, REP, UNA, Other, TOTAL) |>
+  mutate(DEM_per = (DEM/TOTAL)*100) |>
+  mutate(REP_per = (REP/TOTAL)*100) |>
+  mutate(UNA_per = (UNA/TOTAL)*100) |>
+  mutate(Other_per = (Other/TOTAL)*100) |>
+  mutate(DEM_REP = DEM_per-REP_per) |>
+  mutate(REP_UNA = REP_per-UNA_per) |>
+  mutate(DEM_UNA = DEM_per-UNA_per)
+#General24
+pattern_county_general_24 <- county_general_24 |>
+  mutate(Other = LIB+OTH+NLM+GRN) |>
+  select(County, DEM, REP, UNA, Other, TOTAL) |>
+  mutate(DEM_per = (DEM/TOTAL)*100) |>
+  mutate(REP_per = (REP/TOTAL)*100) |>
+  mutate(UNA_per = (UNA/TOTAL)*100) |>
+  mutate(Other_per = (Other/TOTAL)*100) |>
+  mutate(DEM_REP = DEM_per-REP_per) |>
+  mutate(REP_UNA = REP_per-UNA_per) |>
+  mutate(DEM_UNA = DEM_per-UNA_per)
 
+#Compare to Population
+#Primary24
+total_county_primary_24 <- county_primary_24 |>
+  select(County, TOTAL) |>
+  mutate(County = str_trim(County,side="both"))
+cleaned_county_population <- county_population |>
+  rename(County = 2, population = 4) |>
+  select(2,4) |>
+  mutate(County = gsub(" County, Maryland", "", County)) |>
+  mutate(County = gsub("Baltimore", "Baltimore County", County)) |>
+  mutate(County = gsub("Baltimore County city, Maryland", "Baltimore City", County)) |>
+  mutate(County = gsub("St. Mary's", "Saint Mary's", County)) |>
+  mutate(County = str_trim(County,side="both"))
+regis_population_county_primary_24 <- total_county_primary_24 |>
+  left_join(cleaned_county_population, join_by(County)) |>
+  mutate(Percent = (TOTAL/population)*100)
+#General24
+total_county_general_24 <- county_general_24 |>
+  select(County, TOTAL) |>
+  mutate(County = str_trim(County,side="both"))
+regis_population_county_general_24 <- total_county_general_24 |>
+  left_join(cleaned_county_population, join_by(County)) |>
+  mutate(Percent = (TOTAL/population)*100)
 
+#Compare to the result
+#Clean the result
+county_result_cleaned <- pres_election_result_county |>
+  rename(County = 1, DEM1 = 2, REP1 = 3, LIB = 4, GRN = 5, UNA1 = 6, DEM2 = 7, DEM3 = 8, REP2 = 9, REP3 = 10, OTH1 = 11, OTH2 = 12, OTH3 = 13, OTH4 = 14, OTH5 = 15, OTH6 = 16, UNA2 = 17, UNA3 = 18, UNA4 = 19, UNA5 = 20, UNA6 = 21, UNA7 = 22, UNA8 = 23, UNA9 = 24, UNA10 = 25, UNA11 = 26, UNA12 = 27, UNA13 = 28, UNA14 = 29, UNA15 = 30, UNA16 = 31, UNA17 = 32, UNA18 = 33, UNA19 = 34, OTH7 = 35) |>
+  mutate(DEM1 = as.numeric(gsub(",","", DEM1))) |>
+  mutate(REP1 = as.numeric(gsub(",","", REP1))) |>
+  mutate(LIB = as.numeric(gsub(",","", LIB))) |>
+  mutate(GRN = as.numeric(gsub(",","", GRN))) |>
+  mutate(UNA1 = as.numeric(gsub(",","", UNA1))) |>
+  mutate(DEM2 = as.numeric(gsub(",","", DEM2))) |>
+  mutate(DEM3 = as.numeric(gsub(",","", DEM3))) |>
+  mutate(REP2 = as.numeric(gsub(",","", REP2))) |>
+  mutate(REP3 = as.numeric(gsub(",","", REP3))) |>
+  mutate(OTH1 = as.numeric(gsub(",","", OTH1))) |>
+  mutate(OTH2 = as.numeric(gsub(",","", OTH2))) |>
+  mutate(OTH3 = as.numeric(gsub(",","", OTH3))) |>
+  mutate(OTH4 = as.numeric(gsub(",","", OTH4))) |>
+  mutate(OTH5 = as.numeric(gsub(",","", OTH5))) |>
+  mutate(OTH6 = as.numeric(gsub(",","", OTH6))) |>
+  mutate(UNA2 = as.numeric(gsub(",","", UNA2))) |>
+  mutate(UNA3 = as.numeric(gsub(",","", UNA3))) |>
+  mutate(UNA4 = as.numeric(gsub(",","", UNA4))) |>
+  mutate(UNA5 = as.numeric(gsub(",","", UNA5))) |>
+  mutate(UNA6 = as.numeric(gsub(",","", UNA6))) |>
+  mutate(UNA7 = as.numeric(gsub(",","", UNA7))) |>
+  mutate(UNA8 = as.numeric(gsub(",","", UNA8))) |>
+  mutate(UNA9 = as.numeric(gsub(",","", UNA9))) |>
+  mutate(UNA10 = as.numeric(gsub(",","", UNA10))) |>
+  mutate(UNA11 = as.numeric(gsub(",","", UNA11))) |>
+  mutate(UNA12 = as.numeric(gsub(",","", UNA12))) |>
+  mutate(UNA13 = as.numeric(gsub(",","", UNA13))) |>
+  mutate(UNA14 = as.numeric(gsub(",","", UNA14))) |>
+  mutate(UNA15 = as.numeric(gsub(",","", UNA15))) |>
+  mutate(UNA16 = as.numeric(gsub(",","", UNA16))) |>
+  mutate(UNA17 = as.numeric(gsub(",","", UNA17))) |>
+  mutate(UNA18 = as.numeric(gsub(",","", UNA18))) |>
+  mutate(UNA19 = as.numeric(gsub(",","", UNA19))) |>
+  mutate(OTH7 = as.numeric(gsub(",","", OTH7))) |>
+  slice(-25) |>
+  mutate(DEM = DEM1 + DEM2 + DEM3) |>
+  mutate(REP = REP1 + REP2 + REP3) |>
+  mutate(UNA = UNA1 + UNA2 + UNA3 + UNA4 + UNA5 + UNA6 + UNA7 + UNA8 + UNA9 + UNA10 + UNA11 + UNA12 + UNA13 + UNA14 + UNA15 + UNA16 + UNA17 + UNA18 + UNA19) |>
+  mutate(OTH = OTH1 + OTH2 + OTH3 + OTH4 + OTH5 + OTH6 + OTH7 + LIB + GRN) |>
+  select(County, DEM, REP, UNA, OTH) |>
+  mutate(Total = DEM+REP+UNA+OTH) |>
+  mutate(DEM_per = (DEM/Total)*100) |>
+  mutate(REP_per = (REP/Total)*100) |>
+  mutate(UNA_per = (UNA/Total)*100) |>
+  mutate(OTH_per = (OTH/Total)*100) |>
+  mutate(DEM_REP = DEM_per-REP_per) |>
+  mutate(REP_UNA = REP_per-UNA_per) |>
+  mutate(DEM_UNA = DEM_per-UNA_per)
+```
+```{r}
+#Compare Presidential result between each candidate.
+CANDIDATES_county_result_cleaned <- pres_election_result_county |>
+  rename(County = 1, DEM1 = 2, REP1 = 3, LIB = 4, GRN = 5, UNA1 = 6, DEM2 = 7, DEM3 = 8, REP2 = 9, REP3 = 10, OTH1 = 11, OTH2 = 12, OTH3 = 13, OTH4 = 14, OTH5 = 15, OTH6 = 16, UNA2 = 17, UNA3 = 18, UNA4 = 19, UNA5 = 20, UNA6 = 21, UNA7 = 22, UNA8 = 23, UNA9 = 24, UNA10 = 25, UNA11 = 26, UNA12 = 27, UNA13 = 28, UNA14 = 29, UNA15 = 30, UNA16 = 31, UNA17 = 32, UNA18 = 33, UNA19 = 34, OTH7 = 35) |>
+  mutate(DEM1 = as.numeric(gsub(",","", DEM1))) |>
+  mutate(REP1 = as.numeric(gsub(",","", REP1))) |>
+  mutate(LIB = as.numeric(gsub(",","", LIB))) |>
+  mutate(GRN = as.numeric(gsub(",","", GRN))) |>
+  mutate(UNA1 = as.numeric(gsub(",","", UNA1))) |>
+  mutate(DEM2 = as.numeric(gsub(",","", DEM2))) |>
+  mutate(DEM3 = as.numeric(gsub(",","", DEM3))) |>
+  mutate(REP2 = as.numeric(gsub(",","", REP2))) |>
+  mutate(REP3 = as.numeric(gsub(",","", REP3))) |>
+  mutate(OTH1 = as.numeric(gsub(",","", OTH1))) |>
+  mutate(OTH2 = as.numeric(gsub(",","", OTH2))) |>
+  mutate(OTH3 = as.numeric(gsub(",","", OTH3))) |>
+  mutate(OTH4 = as.numeric(gsub(",","", OTH4))) |>
+  mutate(OTH5 = as.numeric(gsub(",","", OTH5))) |>
+  mutate(OTH6 = as.numeric(gsub(",","", OTH6))) |>
+  mutate(UNA2 = as.numeric(gsub(",","", UNA2))) |>
+  mutate(UNA3 = as.numeric(gsub(",","", UNA3))) |>
+  mutate(UNA4 = as.numeric(gsub(",","", UNA4))) |>
+  mutate(UNA5 = as.numeric(gsub(",","", UNA5))) |>
+  mutate(UNA6 = as.numeric(gsub(",","", UNA6))) |>
+  mutate(UNA7 = as.numeric(gsub(",","", UNA7))) |>
+  mutate(UNA8 = as.numeric(gsub(",","", UNA8))) |>
+  mutate(UNA9 = as.numeric(gsub(",","", UNA9))) |>
+  mutate(UNA10 = as.numeric(gsub(",","", UNA10))) |>
+  mutate(UNA11 = as.numeric(gsub(",","", UNA11))) |>
+  mutate(UNA12 = as.numeric(gsub(",","", UNA12))) |>
+  mutate(UNA13 = as.numeric(gsub(",","", UNA13))) |>
+  mutate(UNA14 = as.numeric(gsub(",","", UNA14))) |>
+  mutate(UNA15 = as.numeric(gsub(",","", UNA15))) |>
+  mutate(UNA16 = as.numeric(gsub(",","", UNA16))) |>
+  mutate(UNA17 = as.numeric(gsub(",","", UNA17))) |>
+  mutate(UNA18 = as.numeric(gsub(",","", UNA18))) |>
+  mutate(UNA19 = as.numeric(gsub(",","", UNA19))) |>
+  mutate(OTH7 = as.numeric(gsub(",","", OTH7))) |>
+  slice(-25) |>
+  mutate(Total = DEM1+REP1+LIB+GRN+UNA1+DEM2+DEM3+REP2+REP3+OTH1+OTH2+OTH3+OTH4+OTH5+OTH6+UNA2+UNA3+UNA4+UNA5+UNA6+UNA7+UNA8+UNA9+UNA10+UNA11+UNA12+UNA13+UNA14+UNA15+UNA16+UNA17+UNA18+UNA19+OTH7) |>
+  mutate(DEM1per = (DEM1/Total)*100) |>
+  mutate(REP1per = (REP1/Total)*100) |>
+  mutate(LIBper = (LIB/Total)*100) |>
+  mutate(GRNper = (GRN/Total)*100) |>
+  mutate(UNA1per = (UNA1/Total)*100) |>
+  mutate(DEM2per = (DEM2/Total)*100) |>
+  mutate(DEM3per = (DEM3/Total)*100) |>
+  mutate(REP2per = (REP2/Total)*100) |>
+  mutate(REP3per = (REP3/Total)*100) |>
+  mutate(OTH1per = (OTH1/Total)*100) |>
+  mutate(OTH2per = (OTH2/Total)*100) |>
+  mutate(OTH3per = (OTH3/Total)*100) |>
+  mutate(OTH4per = (OTH4/Total)*100) |>
+  mutate(OTH5per = (OTH5/Total)*100) |>
+  mutate(OTH6per = (OTH6/Total)*100) |>
+  mutate(UNA2per = (UNA2/Total)*100) |>
+  mutate(UNA3per = (UNA3/Total)*100) |>
+  mutate(UNA4per = (UNA4/Total)*100) |>
+  mutate(UNA5per = (UNA5/Total)*100) |>
+  mutate(UNA6per = (UNA6/Total)*100) |>
+  mutate(UNA7per = (UNA7/Total)*100) |>
+  mutate(UNA8per = (UNA8/Total)*100) |>
+  mutate(UNA9per = (UNA9/Total)*100) |>
+  mutate(UNA10per = (UNA10/Total)*100) |>
+  mutate(UNA11per = (UNA11/Total)*100) |>
+  mutate(UNA12per = (UNA12/Total)*100) |>
+  mutate(UNA13per = (UNA13/Total)*100) |>
+  mutate(UNA14per = (UNA14/Total)*100) |>
+  mutate(UNA15per = (UNA15/Total)*100) |>
+  mutate(UNA16per = (UNA16/Total)*100) |>
+  mutate(UNA17per = (UNA17/Total)*100) |>
+  mutate(UNA18per = (UNA18/Total)*100) |>
+  mutate(UNA19per = (UNA19/Total)*100) |>
+  mutate(OTH7per = (OTH7/Total)*100) |>
+  select(-2,-3,-4,-5,-6,-7,-8,-9,-10,-11,-12,-13,-14,-15,-16,-17,-18,-19,-20,-21,-22,-23,-24,-25,-26,-27,-28,-29,-30,-31,-32,-33,-34,-35)
+```
+```{r}
+#Compare Presidential race results (only main candidates) from 2024, 2020 and 2016
+#2024
+MAIN_CANDIDATES_2024 <- pres_election_result_county |>
+  select(1,2,3) |>
+  rename(Harris = 2, Trump = 3) |>
+  mutate(Harris = as.numeric(gsub(",","", Harris))) |>
+  mutate(Trump = as.numeric(gsub(",","", Trump))) |>
+  mutate(Total = Harris + Trump) |>
+  mutate(Harris2024 = (Harris/Total)*100) |>
+  mutate(Trump2024 = (Trump/Total)*100) |>
+  select(1,5,6)
+#2020
+pres_election_result_county_2020_url <- "https://elections.maryland.gov/elections/2020/results/general/gen_detail_results_2020_4_BOT001-.html"
+pres_election_result_county_2020_html <- pres_election_result_county_2020_url |>
+  read_html() |>
+  html_table()
+pres_election_result_2020_county <- pres_election_result_county_2020_html[[2]]
+MAIN_CANDIDATES_2020 <- pres_election_result_2020_county |>
+  select(1,2,3) |>
+  rename(Trump = 2, Biden = 3) |>
+  mutate(Trump = as.numeric(gsub(",","", Trump))) |>
+  mutate(Biden = as.numeric(gsub(",","", Biden))) |>
+  mutate(Total = Trump + Biden) |>
+  mutate(Trump2020 = (Trump/Total)*100) |>
+  mutate(Biden2020 = (Biden/Total)*100) |>
+  select(6,5)
+#2016
+pres_election_result_county_2016_url <- "https://elections.maryland.gov/elections/2016/results/general/gen_detail_results_2016_4_BOT001-.html"
+pres_election_result_county_2016_html <- pres_election_result_county_2016_url |>
+  read_html() |>
+  html_table()
+pres_election_result_2016_county <- pres_election_result_county_2016_html[[1]]
+MAIN_CANDIDATES_2016 <- pres_election_result_2016_county |>
+  select(1,2,3) |>
+  rename(Trump = 2, Clinton = 3) |>
+  mutate(Trump = as.numeric(gsub(",","", Trump))) |>
+  mutate(Clinton = as.numeric(gsub(",","", Clinton))) |>
+  mutate(Total = Trump + Clinton) |>
+  mutate(Trump2016 = (Trump/Total)*100) |>
+  mutate(Clinton2016 = (Clinton/Total)*100) |>
+  select(6,5)
+MAIN_CANDIDATES_COMPARE <- bind_cols(MAIN_CANDIDATES_2024,MAIN_CANDIDATES_2020,MAIN_CANDIDATES_2016)
+MAIN_CANDIDATES_COMPARE <- MAIN_CANDIDATES_COMPARE |>
+  select(1,3,5,7)
+```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Thank you Mr. Willis, have a great winter break.❄️😊
