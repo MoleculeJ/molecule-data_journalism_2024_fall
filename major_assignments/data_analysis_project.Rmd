@@ -1702,7 +1702,7 @@ We don't have data for all 47 districts in the MD. Our data has granular data on
 
 *Deliverable 5: The Final Memo and All the Coding Work*
 
-DATA ANALYSIS PROJECT - FINAL MEMO
+DATA ANALYSIS PROJECT - FINAL MEMO (https://docs.google.com/document/d/1c7djDTlHX2vRUEDavdTbzA_S5vJkOzYXN2ceLLZySo8/edit?usp=sharing)
 
 After the 2024 general election, we'll see many voting trends and patterns related to elections reoccur with numerous races, areas, and many levels of administrative districts in Maryland that confirm our understanding of the area. However, if we look closer, we'll find some variations or outliers among counties, congressional districts, legislative districts, or precincts that contradict what happened in the areas nearby or the general comprehension of the people's behaviors in those areas. These are what we think could lead to interesting stories.
 
